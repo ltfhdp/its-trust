@@ -15,7 +15,10 @@ devices = [
 def register_all_devices():
     for device in devices:
         res = requests.post(f"{API_BASE}/device/", json=device)
-        print(f"Registered {device['id']}: {res.status_code}")
+        if res.status_code != 200:
+            print(f"Failed to register {device['id']}: {res.status_code} - {res.text}")
+        else:
+            print(f"Registered {device['id']}")
         time.sleep(0.1)
 
 def simulate_interactions(num_interactions=50):
@@ -62,21 +65,34 @@ def simulate_behavioral_attacker(device_id, targets, fail_rate=1.0, times=20):
 def show_device_summary():
     print("\nCurrent Device Trust States:\n")
     res = requests.get(f"{API_BASE}/devices/")
-    for d in res.json():
-        print(f"{d['id']} | Trust: {d['trust_score']:.3f} | Blacklisted: {d['is_blacklisted']} | Coordinator: {d['is_coordinator']}")
+    if res.status_code == 200:
+        for d in res.json():
+            print(f"{d['id']} | Trust: {d['trust_score']:.3f} | Blacklisted: {d['is_blacklisted']} | Coordinator: {d['is_coordinator']}")
+    else:
+        print("Failed to fetch devices")
 
 def list_suspicious_devices():
     res = requests.get(f"{API_BASE}/devices/")
     print("\nSuspicious Devices (Blacklisted or Low Trust):")
-    for d in res.json():
-        if d["is_blacklisted"] or d["trust_score"] < 0.4:
-            print(f"{d['id']} | Trust: {d['trust_score']} | Blacklisted: {d['is_blacklisted']}")
+    if res.status_code == 200:
+        for d in res.json():
+            if d["is_blacklisted"] or d["trust_score"] < 0.4:
+                print(f"{d['id']} | Trust: {d['trust_score']} | Blacklisted: {d['is_blacklisted']}")
+    else:
+        print("Failed to fetch devices")
 
 def show_device_history(device_id):
     print(f"\nTrust History for {device_id}:")
     res = requests.get(f"{API_BASE}/device/{device_id}/history")
-    for h in res.json():
-        print(f"{h['timestamp']} | Trust: {h['trust_score']:.3f} | Notes: {h['notes']}")
+    if res.status_code == 200:
+        history = res.json()
+        if history:
+            for h in history:
+                print(f"{h['timestamp']} | Trust: {h['trust_score']:.3f} | Notes: {h['notes']}")
+        else:
+            print("No trust history recorded")
+    else:
+        print(f"Failed to fetch history for {device_id} ({res.status_code})")
 
 def show_all_device_histories():
     for d in devices:
@@ -86,11 +102,18 @@ def show_all_device_histories():
 def show_coordinator():
     res = requests.get(f"{API_BASE}/coordinator")
     print("\nCurrent Coordinator:")
-    print(f"{res.json()['id']} - {res.json()['name']}")
+    if res.status_code == 200 and res.content:
+        try:
+            data = res.json()
+            print(f"{data['id']} - {data['name']}")
+        except ValueError:
+            print("No coordinator found (invalid JSON response).")
+    else:
+        print("Coordinator not found or response error")
 
 if __name__ == "__main__":
     register_all_devices()
-    simulate_interactions(40)
+    simulate_interactions(3)
     simulate_behavioral_attacker("cam-1", targets=[d["id"] for d in devices if d["id"] != "cam-1"], fail_rate=0.9)
     show_device_summary()
     list_suspicious_devices()

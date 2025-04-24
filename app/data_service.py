@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from .models import Device, Connection, TrustHistory, PeerRating
 from .trust import (
+    get_computing_weight,
     calculate_initial_trust,
     calculate_updated_trust,
     get_connection_status_score,
@@ -15,12 +16,15 @@ def add_device(session: Session, device_data: dict) -> Device:
         device_data["memory_gb"]
     )
 
+    computing_power = get_computing_weight(device_data["device_type"])
+
     device = Device(
         id=device_data["id"],
         name=device_data["name"],
+        ownership_type=device_data["ownership_type"],
         device_type=device_data["device_type"],
         memory_gb=device_data["memory_gb"],
-        computing_power=device_data["computing_power"],
+        computing_power=computing_power,
         location=device_data["location"],
         trust_score=trust_score
     )
@@ -123,6 +127,7 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
         notes="Connection {} with {}".format("success" if success else "failed", peer.id)
     )
     session.add(history)
+    session.commit()
 
 # Pemilihan koordinator otomatis
 def select_coordinator(session: Session):

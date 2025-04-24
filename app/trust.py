@@ -1,65 +1,59 @@
-from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, ForeignKey, Text
-from sqlalchemy.orm import relationship
-from datetime import datetime
-from .data_service import Base
+from enum import Enum
 
-class Device(Base):
-    __tablename__ = "devices"
+def normalize(value: float, max_value: float = 16.0) -> float:
+    return min(value / max_value, 1.0)
 
-    id = Column(String, primary_key=True, index=True)
-    name = Column(String)
-    device_type = Column(String)  # "internal" or "external"
-    memory_gb = Column(Float)
-    computing_power = Column(Float)
-    location = Column(String)
-    trust_score = Column(Float, default=0.5)
-    successful_connections = Column(Integer, default=0)
-    failed_connections = Column(Integer, default=0)
-    is_blacklisted = Column(Boolean, default=False)
-    is_coordinator = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+class DeviceType(Enum):
+    RSU = "RSU"
+    COMPUTER = "Computer"
+    SMARTPHONE = "Smartphone"
+    SMART_DEVICE = "Smart Device"
+    SENSOR = "Sensor"
+    RFID = "RFID"
 
-    trust_history = relationship("TrustHistory", back_populates="device", cascade="all, delete-orphan")
-    connections_initiated = relationship("Connection", back_populates="source_device", foreign_keys='Connection.source_device_id')
-    connections_received = relationship("Connection", back_populates="target_device", foreign_keys='Connection.target_device_id')
-    ratings_given = relationship("PeerRating", back_populates="rater", foreign_keys='PeerRating.rater_device_id')
-    ratings_received = relationship("PeerRating", back_populates="rated", foreign_keys='PeerRating.rated_device_id')
+def get_computing_weight(device_type: str) -> float:
+    weights = {
+        "RSU": 1.0,
+        "Computer": 0.8,
+        "Smartphone": 0.6,
+        "Smart Device": 0.4,
+        "Sensor": 0.2,
+        "RFID": 0.1
+    }
+    return weights.get(device_type, 0.5)
 
-class TrustHistory(Base):
-    __tablename__ = "trust_history"
+def get_memory_weight(memory_gb: float) -> float:
+    if memory_gb <= 2:
+        return 0.2
+    elif memory_gb <= 4:
+        return 0.4
+    elif memory_gb <= 8:
+        return 0.6
+    elif memory_gb <= 16:
+        return 0.8
+    else:
+        return 1.0
 
-    id = Column(Integer, primary_key=True, index=True)
-    device_id = Column(String, ForeignKey("devices.id"))
-    timestamp = Column(DateTime, default=datetime.utcnow)
-    trust_score = Column(Float)
-    connection_count = Column(Integer)
-    last_connected_device_id = Column(String, ForeignKey("devices.id"), nullable=True)
-    notes = Column(Text, nullable=True)
+def calculate_initial_trust(ownership_type: str, memory_gb: float) -> float:
+    if ownership_type.lower() == "internal":
+        mem_weight = get_memory_weight(memory_gb)
+        comp_weight = get_computing_weight("RSU")  # default RSU for internal
+        return round((mem_weight + comp_weight) / 2, 3)
+    else:
+        return 0.5
 
-    device = relationship("Device", back_populates="trust_history")
+def calculate_updated_trust(
+    last_trust: float,
+    centrality_score: float,
+    avg_peer_rating: float,
+    connection_status_score: float
+) -> float:
+    a, b, c, d = 0.5, 0.1, 0.2, 0.2
+    t_updated = (a * last_trust) + (b * centrality_score) + (c * avg_peer_rating) + (d * connection_status_score)
+    return max(0.0, min(1.0, round(t_updated, 3)))
 
-class Connection(Base):
-    __tablename__ = "connections"
+def get_connection_status_score(success: bool) -> float:
+    return 0.1 if success else -0.1
 
-    id = Column(Integer, primary_key=True, index=True)
-    source_device_id = Column(String, ForeignKey("devices.id"))
-    target_device_id = Column(String, ForeignKey("devices.id"))
-    timestamp = Column(DateTime, default=datetime.utcnow)
-    status = Column(Boolean)
-    connection_type = Column(String, default="data")  # opsional
-
-    source_device = relationship("Device", back_populates="connections_initiated", foreign_keys=[source_device_id])
-    target_device = relationship("Device", back_populates="connections_received", foreign_keys=[target_device_id])
-
-class PeerRating(Base):
-    __tablename__ = "peer_ratings"
-
-    id = Column(Integer, primary_key=True, index=True)
-    rater_device_id = Column(String, ForeignKey("devices.id"))
-    rated_device_id = Column(String, ForeignKey("devices.id"))
-    timestamp = Column(DateTime, default=datetime.utcnow)
-    score = Column(Float)  # 0.0 - 1.0
-    comment = Column(Text)
-
-    rater = relationship("Device", back_populates="ratings_given", foreign_keys=[rater_device_id])
-    rated = relationship("Device", back_populates="ratings_received", foreign_keys=[rated_device_id])
+def should_blacklist(trust_score: float, threshold: float = 0.3) -> bool:
+    return trust_score < threshold

@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
-from app.data_service import SessionLocal, engine
+from app.database import SessionLocal, engine
 from app import models, data_service
 from pydantic import BaseModel
 from typing import List
@@ -41,9 +41,11 @@ def create_device(device: DeviceCreate, db: Session = Depends(get_db)):
 @app.post("/connect/")
 def connect_device(conn: ConnectionCreate, db: Session = Depends(get_db)):
     try:
+        print(f"📡 CONNECT: {conn.device_id} → {conn.connected_device_id}, status={conn.status}") #debugging
         data_service.record_connection(db, conn.device_id, conn.connected_device_id, conn.status)
         return {"message": "Connection recorded and trust updated"}
     except Exception as e:
+        print(f"❌ ERROR: {e}") # debugging
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/devices/")

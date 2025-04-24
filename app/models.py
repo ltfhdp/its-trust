@@ -1,20 +1,22 @@
 from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from .data_service import Base
+from .database import Base
 
 class Device(Base):
     __tablename__ = "devices"
 
     id = Column(String, primary_key=True, index=True)
     name = Column(String)
-    device_type = Column(String)  # "internal" or "external"
+    ownership_type = Column(String) # "internal" or "external"
+    device_type = Column(String)  
     memory_gb = Column(Float)
     computing_power = Column(Float)
     location = Column(String)
     trust_score = Column(Float, default=0.5)
     successful_connections = Column(Integer, default=0)
     failed_connections = Column(Integer, default=0)
+    is_coordinator = Column(Boolean, default=False)
     is_blacklisted = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 

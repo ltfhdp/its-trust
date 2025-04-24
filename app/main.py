@@ -20,9 +20,9 @@ def get_db():
 class DeviceCreate(BaseModel):
     id: str
     name: str
+    ownership_type: str
     device_type: str  # internal / external
     memory_gb: float
-    computing_power: float
     location: str
 
 class ConnectionCreate(BaseModel):

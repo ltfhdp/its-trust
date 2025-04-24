@@ -34,6 +34,7 @@ class TrustHistory(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
     trust_score = Column(Float)
     connection_count = Column(Integer)
+    last_connected_device_id = Column(String, ForeignKey("devices.id"))
     notes = Column(Text)
 
     device = relationship("Device", back_populates="trust_history")

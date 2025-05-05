@@ -1,6 +1,7 @@
 import requests
 import random
 import time
+from typing import List
 
 API_BASE = "http://localhost:8000"
 
@@ -62,6 +63,31 @@ def simulate_behavioral_attacker(device_id, targets, fail_rate=1.0, times=20):
         print(f"{device_id} → {target}: {'✔' if status else '✘'} ({res.status_code})")
         time.sleep(0.1)
 
+def simulate_bad_mouthing(attacker_id: str, target_ids: List[str], bad_rating: float):
+    """Simulate a bad-mouthing attack where the attacker gives a conistently low rating to target devices"""
+
+    print(f"\nSimulating Bad-Mouthing Attack: {attacker_id} attacking {target_ids} with rating {bad_rating}")
+
+    for target_id in target_ids:
+        # create a connection
+        res = requests.post(f"{API_BASE}/connect/", json={
+            "device_id": attacker_id,
+            "connected_device_id": target_id,
+            "status": False #tidak berpengaruh untuk attacker, hanya untuk memperjelas
+        })
+        if res.status_code != 200:
+            print(f"Failed to create connection for bad mouthing: {res.status_code} - {res.text}")
+            continue
+
+        #simulasi bad rating
+        res = requests.post(f"{API_BASE}/rate_peer/", json={
+            "rater_device_id": attacker_id,
+            "rated_device_id": target_id,
+            "score": bad_rating
+        })
+        if res.status_code != 200:
+            print(f"Failed to rate {target_id}: {res.status_code} - {res.text}")
+
 def show_device_summary():
     print("\nCurrent Device Trust States:\n")
     res = requests.get(f"{API_BASE}/devices/")
@@ -115,6 +141,11 @@ if __name__ == "__main__":
     register_all_devices()
     simulate_interactions(3)
     simulate_behavioral_attacker("cam-1", targets=[d["id"] for d in devices if d["id"] != "cam-1"], fail_rate=0.9)
+    # Contoh simulasi bad mouthing attack
+    attacker = "cam-1"
+    targets = [d["id"] for d in devices if d["id"] != attacker]  # Semua device kecuali penyerang
+    bad_rating = 0.0  # Rating yang sangat rendah
+    simulate_bad_mouthing(attacker, targets, bad_rating)
     show_device_summary()
     list_suspicious_devices()
     show_all_device_histories()

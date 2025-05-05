@@ -86,6 +86,11 @@ def rate_peer(session: Session, rater_id: str, rated_id: str, score: float):
     session.add(rating)
     session.commit()
 
+    rater = session.get(Device, rater_id)
+    rated = session.get(Device, rated_id)
+    update_trust_score(session, rater, rated, False)
+    update_trust_score(session, rated, rater, False)
+
 # Hitung centrality berdasarkan jumlah device unik yang connect ke dia
 def calculate_centrality(session: Session, device_id: str) -> float:
     unique_sources = session.query(Connection.source_device_id)\

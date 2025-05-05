@@ -30,6 +30,13 @@ class ConnectionCreate(BaseModel):
     connected_device_id: str
     status: bool
 
+
+class PeerRatingCreate(BaseModel):
+    rater_device_id: str
+    rated_device_id: str
+    score: float
+    comment: str = None
+
 # === Routes ===
 @app.post("/device/")
 def create_device(device: DeviceCreate, db: Session = Depends(get_db)):
@@ -76,3 +83,11 @@ def get_current_coordinator(db: Session = Depends(get_db)):
 def get_trust_history_by_coordinator(coordinator_id: str, db: Session = Depends(get_db)):
     history = db.query(models.TrustHistory).filter_by(coordinator_id).order_by(models.TrustHistory.timestamp.asc()).all()
     return history
+
+@app.post("/rate_peer/")
+def rate_peer(rating: PeerRatingCreate, db: Session = Depends(get_db)):
+    try:
+        data_service.rate_peer(db, rating.rated_device_id, rating.rated_device_id, rating.score)
+        return {"message": "Peer rating recorded"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

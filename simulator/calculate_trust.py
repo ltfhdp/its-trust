@@ -5,7 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.trust import (
     calculate_initial_trust, get_computing_weight, get_memory_weight,
-    calculate_updated_trust, get_connection_status_score
+    calculate_updated_trust, get_direct_trust_score
 )
 
 devices = [
@@ -32,17 +32,17 @@ for device in devices:
 # simulasi update trust update setelah koneksi
 def simulate_connection(device1, device2, success=True):
     # default values buat simulasi sederhana cek kalkulasi
-    centrality_score = 0.2  
-    avg_peer_rating = 0.5  
-    conn_score = get_connection_status_score(success)
+    centrality_score = 0.5  
+    indirect_trust = 0.8  
+    direct_trust = get_direct_trust_score(success)
     
     # menghitung update trust device1
     initial_trust = calculate_initial_trust(device1["ownership_type"], device1["memory_gb"])
     updated_trust = calculate_updated_trust(
         last_trust=initial_trust,
         centrality_score=centrality_score,
-        avg_peer_rating=avg_peer_rating,
-        connection_status_score=conn_score
+        direct_trust=direct_trust,
+        indirect_trust=indirect_trust
     )
     
     print(f"\nSimulated Connection: {device1['id']} → {device2['id']} ({'Success' if success else 'Failed'})")
@@ -52,11 +52,11 @@ def simulate_connection(device1, device2, success=True):
     
     # Print the calculation components
     print("\nCalculation Details:")
-    print(f"  Last Trust: {initial_trust} × 0.5 = {initial_trust * 0.5}")
-    print(f"  Centrality: {centrality_score} × 0.1 = {centrality_score * 0.1}")
-    print(f"  Peer Rating: {avg_peer_rating} × 0.2 = {avg_peer_rating * 0.2}")
-    print(f"  Connection: {conn_score} × 0.2 = {conn_score * 0.2}")
-    print(f"  Total: {initial_trust * 0.5} + {centrality_score * 0.1} + {avg_peer_rating * 0.2} + {conn_score * 0.2} = {updated_trust}")
+    print(f"  Last Trust: {initial_trust} × 0.2 = {initial_trust * 0.2}")
+    print(f"  Centrality: {centrality_score} × 0.5 = {centrality_score * 0.1}")
+    print(f"  Peer Rating: {indirect_trust} × 0.2 = {indirect_trust * 0.2}")
+    print(f"  Connection: ({direct_trust}+{initial_trust}) × 0.1 = {(direct_trust + initial_trust )* 0.5}")
+    print(f"  Total: {initial_trust * 0.2} + {centrality_score * 0.1} + {indirect_trust * 0.2} + {(direct_trust+initial_trust) * 0.5} = {updated_trust}")
 
 print("\nCONNECTION SIMULATION")
 # Run example simulations

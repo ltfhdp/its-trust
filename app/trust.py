@@ -51,9 +51,10 @@ def calculate_updated_trust(
     indirect_trust: float,
     centrality_score: float,
 ) -> float:
-    w0, w1, w2, w3 = 0.5, 0.05, 0.15, 0.3
+    w0, w1, w2, w3 = 0.2, 0.5, 0.2, 0.1
 
-    t_updated = (w0 * last_trust) + (w1 * direct_trust) + (w2 * indirect_trust) + (w3 * centrality_score)
+    td = last_trust + direct_trust
+    t_updated = (w0 * last_trust) + (w1 * td) + (w2 * indirect_trust) + (w3 * centrality_score)
     return max(0.0, min(1.0, round(t_updated, 3)))
 
 def should_blacklist(trust_score: float, threshold: float = 0.3) -> bool:

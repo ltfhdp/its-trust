@@ -42,18 +42,19 @@ def calculate_initial_trust(ownership_type: str, memory_gb: float) -> float:
     else:
         return 0.5
 
+def get_direct_trust_score(success: bool) -> float:
+    return 0.1 if success else -0.1
+
 def calculate_updated_trust(
     last_trust: float,
+    direct_trust: float,
+    indirect_trust: float,
     centrality_score: float,
-    avg_peer_rating: float,
-    connection_status_score: float
 ) -> float:
-    a, b, c, d = 0.5, 0.1, 0.2, 0.2
-    t_updated = (a * last_trust) + (b * centrality_score) + (c * avg_peer_rating) + (d * connection_status_score)
-    return max(0.0, min(1.0, round(t_updated, 3)))
+    w0, w1, w2, w3 = 0.5, 0.05, 0.15, 0.3
 
-def get_connection_status_score(success: bool) -> float:
-    return 0.1 if success else -0.1
+    t_updated = (w0 * last_trust) + (w1 * direct_trust) + (w2 * indirect_trust) + (w3 * centrality_score)
+    return max(0.0, min(1.0, round(t_updated, 3)))
 
 def should_blacklist(trust_score: float, threshold: float = 0.3) -> bool:
     return trust_score < threshold

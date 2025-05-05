@@ -8,7 +8,7 @@ class Device(Base):
 
     id = Column(String, primary_key=True, index=True)
     name = Column(String)
-    ownership_type = Column(String) # "internal" or "external"
+    ownership_type = Column(String) 
     device_type = Column(String)  
     memory_gb = Column(Float)
     computing_power = Column(Float)
@@ -16,11 +16,12 @@ class Device(Base):
     trust_score = Column(Float, default=0.5)
     successful_connections = Column(Integer, default=0)
     failed_connections = Column(Integer, default=0)
+    connection_count = Column(Integer, default=0)
     is_coordinator = Column(Boolean, default=False)
     is_blacklisted = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    trust_history = relationship("TrustHistory", back_populates="device", cascade="all, delete-orphan")
+    trust_history = relationship("TrustHistory", back_populates="device", cascade="all, delete-orphan", foreign_keys="[TrustHistory.device_id]")
     connections_initiated = relationship("Connection", back_populates="source_device", foreign_keys='Connection.source_device_id')
     connections_received = relationship("Connection", back_populates="target_device", foreign_keys='Connection.target_device_id')
     ratings_given = relationship("PeerRating", back_populates="rater", foreign_keys='PeerRating.rater_device_id')
@@ -37,7 +38,7 @@ class TrustHistory(Base):
     last_connected_device_id = Column(String, ForeignKey("devices.id"))
     notes = Column(Text)
 
-    device = relationship("Device", back_populates="trust_history")
+    device = relationship("Device", back_populates="trust_history", foreign_keys=[device_id])
 
 class Connection(Base):
     __tablename__ = "connections"

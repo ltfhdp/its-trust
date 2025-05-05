@@ -4,8 +4,8 @@ from .models import Device, Connection, TrustHistory, PeerRating
 from .trust import (
     get_computing_weight,
     calculate_initial_trust,
+    get_direct_trust_score,
     calculate_updated_trust,
-    get_connection_status_score,
     should_blacklist
 )
 
@@ -104,17 +104,17 @@ def calculate_centrality(session: Session, device_id: str) -> float:
 
 # Update trust berdasarkan interaksi
 def update_trust_score(session: Session, device: Device, peer: Device, success: bool):
-    conn_score = get_connection_status_score(success)
+    direct_trust = get_direct_trust_score(success)
 
     avg_rating = session.query(PeerRating).filter_by(rated_device_id=device.id).with_entities(PeerRating.score).all()
-    avg_peer_rating = sum([r[0] for r in avg_rating]) / len(avg_rating) if avg_rating else 0.5
+    indirect_trust = sum([r[0] for r in avg_rating]) / len(avg_rating) if avg_rating else 0.5
 
     centrality = calculate_centrality(session, device.id)
     new_trust = calculate_updated_trust(
         last_trust=device.trust_score,
+        direct_trust=direct_trust,
+        indirect_trust=indirect_trust,
         centrality_score=centrality,
-        avg_peer_rating=avg_peer_rating,
-        connection_status_score=conn_score
     )
     device.trust_score = new_trust
     device.is_blacklisted = should_blacklist(new_trust)
@@ -135,11 +135,15 @@ def select_coordinator(session: Session):
     session.query(Device).update({Device.is_coordinator: False})
     session.commit()
 
+    print("Checking for RSU devices...")
     rsu = session.query(Device).filter_by(device_type="RSU", is_blacklisted=False).first()
     if rsu:
+        print(f"Found RSU coordinator: {rsu.id}")
         rsu.is_coordinator = True
         session.commit()
         return rsu
+    else:
+        print("No RSU found,looking for device with highest trust")
 
     # Kalau tidak ada RSU, pilih device dengan trust tertinggi
     best = session.query(Device).filter(Device.is_blacklisted == False).order_by(Device.trust_score.desc()).first()
@@ -147,4 +151,6 @@ def select_coordinator(session: Session):
         best.is_coordinator = True
         session.commit()
         return best
+    else:
+        print("No eligible devices found for coordinator")
     return None

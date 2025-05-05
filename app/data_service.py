@@ -119,12 +119,16 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
     device.trust_score = new_trust
     device.is_blacklisted = should_blacklist(new_trust)
 
+    coordinator = session.query(Device).filter_by(is_coordinator=True).first() #mengambil koor yg aktif
+    coordinator_id = coordinator.id if coordinator else None
+
     history = TrustHistory(
         device_id=device.id,
         trust_score=new_trust,
         connection_count=device.connection_count,
         last_connected_device_id=peer.id,
-        notes="Connection {} with {}".format("success" if success else "failed", peer.id)
+        notes="Connection {} with {}".format("success" if success else "failed", peer.id),
+        coordinator_id=coordinator_id
     )
     session.add(history)
     session.commit()
@@ -135,10 +139,10 @@ def select_coordinator(session: Session):
     session.query(Device).update({Device.is_coordinator: False})
     session.commit()
 
-    print("Checking for RSU devices...")
+    print("Checking for available RSU coordinator...")
     rsu = session.query(Device).filter_by(device_type="RSU", is_blacklisted=False).first()
     if rsu:
-        print(f"Found RSU coordinator: {rsu.id}")
+        print(f"Found and selecting RSU coordinator: {rsu.id}")
         rsu.is_coordinator = True
         session.commit()
         return rsu

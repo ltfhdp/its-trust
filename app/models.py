@@ -37,8 +37,11 @@ class TrustHistory(Base):
     connection_count = Column(Integer)
     last_connected_device_id = Column(String, ForeignKey("devices.id"))
     notes = Column(Text)
+    coordinator_id = Column(String, ForeignKey("devices.id"))
 
     device = relationship("Device", back_populates="trust_history", foreign_keys=[device_id])
+    coordinator = relationship("Device", viewonly=True, foreign_keys=[coordinator_id])
+
 
 class Connection(Base):
     __tablename__ = "connections"

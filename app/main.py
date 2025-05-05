@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from .database import SessionLocal, engine
 from app import models, data_service
 from pydantic import BaseModel
@@ -50,7 +50,8 @@ def connect_device(conn: ConnectionCreate, db: Session = Depends(get_db)):
 
 @app.get("/devices/")
 def list_devices(db: Session = Depends(get_db)):
-    return db.query(models.Device).all()
+    devices = db.query(models.Device).options(joinedload(models.Device.connections_received)).all()
+    return devices
 
 @app.get("/device/{device_id}")
 def get_device(device_id: str, db: Session = Depends(get_db)):
@@ -61,7 +62,8 @@ def get_device(device_id: str, db: Session = Depends(get_db)):
 
 @app.get("/device/{device_id}/history")
 def get_trust_history(device_id: str, db: Session = Depends(get_db)):
-    return db.query(models.TrustHistory).filter_by(device_id=device_id).order_by(models.TrustHistory.timestamp.asc()).all()
+    history = db.query(models.TrustHistory).filter_by(device_id=device_id).order_by(models.TrustHistory.timestamp.asc()).all()
+    return history
 
 @app.get("/coordinator")
 def get_current_coordinator(db: Session = Depends(get_db)):
@@ -69,3 +71,8 @@ def get_current_coordinator(db: Session = Depends(get_db)):
     if not coord:
         raise HTTPException(status_code=404, detail="No coordinator found")
     return coord
+
+@app.get("/coordinator/{coordinator_id}/history")
+def get_trust_history_by_coordinator(coordinator_id: str, db: Session = Depends(get_db)):
+    history = db.query(models.TrustHistory).filter_by(coordinator_id).order_by(models.TrustHistory.timestamp.asc()).all()
+    return history

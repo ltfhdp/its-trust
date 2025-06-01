@@ -38,6 +38,9 @@ class TrustHistory(Base):
     last_connected_device_id = Column(String, ForeignKey("devices.id"))
     notes = Column(Text)
     coordinator_id = Column(String, ForeignKey("devices.id"))
+    direct_trust = Column(Float)
+    indirect_trust = Column(Float)
+    centrality_score = Column(Float)
 
     device = relationship("Device", back_populates="trust_history", foreign_keys=[device_id])
     coordinator = relationship("Device", viewonly=True, foreign_keys=[coordinator_id])

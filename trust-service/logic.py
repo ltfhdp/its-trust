@@ -34,10 +34,10 @@ def get_memory_weight(memory_gb: float) -> float:
     else:
         return 1.0
 
-def calculate_initial_trust(ownership_type: str, memory_gb: float) -> float:
+def calculate_initial_trust(ownership_type: str, memory_gb: float, device_type: str) -> float:
     if ownership_type.lower() == "internal":
         mem_weight = get_memory_weight(memory_gb)
-        comp_weight = get_computing_weight("RSU")  # default RSU for internal
+        comp_weight = get_computing_weight(device_type)  # default RSU for internal
         return round((mem_weight + comp_weight) / 2, 3)
     else:
         return 0.5
@@ -51,11 +51,11 @@ def calculate_updated_trust(
     indirect_trust: float,
     centrality_score: float,
 ) -> float:
-    w0, w1, w2, w3 = 0.2, 0.5, 0.2, 0.1
+    w0, w1, w2 = 0.7, 0.2, 0.1
 
     td = last_trust + direct_trust
-    t_updated = (w0 * last_trust) + (w1 * td) + (w2 * indirect_trust) + (w3 * centrality_score)
-    return max(0.0, min(1.0, round(t_updated, 3)))
+    t_updated = (w0 * td) + (w1 * indirect_trust) + (w2 * centrality_score)
+    return min(max(round(t_updated, 4), 0.0), 1.0)
 
 def should_blacklist(trust_score: float, threshold: float = 0.3) -> bool:
     return trust_score < threshold

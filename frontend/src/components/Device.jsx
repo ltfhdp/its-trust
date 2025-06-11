@@ -8,7 +8,7 @@ export default function DevicePage() {
     name: "",
     device_type: "",
     ownership_type: "",
-    memory_gb: 1,
+    memory_gb: "",
     location: ""
   });
 
@@ -38,6 +38,18 @@ export default function DevicePage() {
     setShowForm(false);
   };
 
+  const handleLeave = async (id) => {
+    if (window.confirm(`Are you sure you want to remove device ${id}?`)) {
+      try {
+        await fetch(`http://localhost:8000/device/${id}/leave`, { method: "POST" });
+        alert("Device has left the system.");
+        fetchDevices();
+      } catch (err) {
+        alert("Failed to remove device.");
+      }
+    }
+  };
+
   return (
     <div className="container">
       <h1 className="text-xl">Devices</h1>
@@ -63,12 +75,18 @@ export default function DevicePage() {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+               <th>ID</th>
               <th>Name</th>
               <th>Type</th>
               <th>Owner</th>
+              <th>Memory</th>
+              <th>Location</th>
               <th>Trust</th>
-              <th>Status</th>
+              <th>Blacklist</th>
+              <th>Coordinator</th>
+              <th>Active</th>
+              <th>Left At</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -78,8 +96,20 @@ export default function DevicePage() {
                 <td>{d.name}</td>
                 <td>{d.device_type}</td>
                 <td>{d.ownership_type}</td>
+                <td>{d.memory_gb}</td>
+                <td>{d.location}</td>
                 <td>{d.trust_score.toFixed(3)}</td>
-                <td>{d.is_blacklisted ? "Blacklisted" : "Active"}</td>
+                <td>{d.is_blacklisted ? "Yes" : "No"}</td>
+                <td>{d.is_coordinator ? "Yes" : "No"}</td>
+                <td>{d.is_active ? "Active" : "Left"}</td>
+                <td>{d.left_at ? new Date(d.left_at).toLocaleString() : "-"}</td>
+                <td>
+                  {d.is_active && !d.is_blacklisted && (
+                    <button onClick={() => handleLeave(d.id)} className="btn btn-sm btn-danger">
+                      Disable
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

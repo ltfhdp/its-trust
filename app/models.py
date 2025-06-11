@@ -19,6 +19,8 @@ class Device(Base):
     connection_count = Column(Integer, default=0)
     is_coordinator = Column(Boolean, default=False)
     is_blacklisted = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    left_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     trust_history = relationship("TrustHistory", back_populates="device", cascade="all, delete-orphan", foreign_keys="[TrustHistory.device_id]")

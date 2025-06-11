@@ -48,6 +48,7 @@ class PeerRatingCreate(BaseModel):
     rated_device_id: str
     score: float
     comment: str = None
+    update_trust: bool = False
 
 class TrustRecord(BaseModel):
     timestamp: datetime
@@ -68,16 +69,23 @@ class TrustRecord(BaseModel):
 def root():
     return {"message": "ITS Trust Backend"}
 
-@app.post("/device/")
-def create_device(device: DeviceCreate, db: Session = Depends(get_db)):
+@app.post("/device")
+def add_device(device: DeviceCreate, db: Session = Depends(get_db)):
     try:
-        return data_service.add_device(db, device.dict())
-    except HTTPException as e:
-        raise e  # Pass through detail & status code
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        result = data_service.add_device(db, device)
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=403, detail=str(e))
 
-@app.post("/connect/")
+@app.post("/device/{device_id}/leave")
+def leave_device(device_id: str, db: Session = Depends(get_db)):
+    try:
+        data_service.leave_device(db, device_id)
+        return {"message": f"Device {device_id} has left the system."}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@app.post("/connect")
 def connect_device(conn: ConnectionCreate, db: Session = Depends(get_db)):
     try:
         print(f"📡 CONNECT: {conn.device_id} → {conn.connected_device_id}, type={conn.connection_type}, status={conn.status}")
@@ -129,7 +137,14 @@ def get_trust_history_by_coordinator(coordinator_id: str, db: Session = Depends(
 @app.post("/rate_peer/")
 def rate_peer(rating: PeerRatingCreate, db: Session = Depends(get_db)):
     try:
-        data_service.rate_peer(db, rating.rater_device_id, rating.rated_device_id, rating.score)
+        data_service.add_peer_rating(
+            db, 
+            rating.rater_device_id, 
+            rating.rated_device_id, 
+            rating.score,
+            reason=rating.comment,
+            update_trust=rating.update_trust  # Set default
+        )
         return {"message": "Peer rating recorded"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

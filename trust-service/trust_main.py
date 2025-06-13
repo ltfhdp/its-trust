@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional
+import numpy as np
 
 from logic import (
     get_computing_weight,
@@ -10,7 +11,8 @@ from logic import (
     get_direct_trust_score,
     calculate_updated_trust,
     should_blacklist,
-    evaluate_flooding_risk
+    evaluate_flooding_risk, 
+    calculate_log_centrality
 )
 
 app = FastAPI()
@@ -33,42 +35,60 @@ class SecurityEvaluateInput(BaseModel):
     device_id: str
     conn_count_last_minute: int
     is_coordinator: bool = False
-    total_active_devices: int = 0
 
-def calculate_consensus_indirect_trust(peer_ratings: List[float]) -> float:
+def calculate_consensus_indirect_trust(peer_ratings: list[float]) -> float:
     """
-    Hitung indirect trust dengan outlier detection - outlier langsung bikin trust turun
+    Menghitung indirect trust menggunakan metode clustering sederhana.
+    Metode ini mengasumsikan kelompok rating terbesar adalah konsensus yang benar.
     """
-    if not peer_ratings or len(peer_ratings) == 0:
+    if not peer_ratings:
         return 0.0
     
-    if len(peer_ratings) == 1:
-        return peer_ratings[0]  # Single rating, langsung pakai
-    
-    # Hitung statistics
-    avg_rating = sum(peer_ratings) / len(peer_ratings)
-    std_dev = (sum((x - avg_rating) ** 2 for x in peer_ratings) / len(peer_ratings)) ** 0.5
-    
-    # Deteksi outliers (nilai yang jauh dari rata-rata)
-    outlier_threshold = max(0.25, 1.5 * std_dev)  # Minimal 0.25 atau 1.5 std dev
-    outliers = [r for r in peer_ratings if abs(r - avg_rating) > outlier_threshold]
-    
-    # Filter outliers
-    filtered_ratings = [r for r in peer_ratings if abs(r - avg_rating) <= outlier_threshold]
-    
-    if len(filtered_ratings) == 0:
-        # Semua rating outlier - trust turun drastis karena inconsistent
-        return max(0.1, avg_rating * 0.5)  # Penalty untuk inconsistency
-    
-    # Pakai rata-rata yang sudah di-filter
-    filtered_avg = sum(filtered_ratings) / len(filtered_ratings)
-    
-    # Apply penalty berdasarkan jumlah outlier
-    outlier_penalty = min(0.2, len(outliers) * 0.05)  # Max penalty 0.2
-    
-    final_indirect = max(0.0, filtered_avg - outlier_penalty)
-    
-    return round(final_indirect, 4)
+    n = len(peer_ratings)
+    if n == 1:
+        return peer_ratings[0]
+
+    # 1. Urutkan rating untuk menemukan pola
+    ratings = sorted(peer_ratings)
+
+    # 2. Cari "celah" terbesar antara rating yang berurutan untuk menemukan pemisah
+    if n > 2:
+        # Hitung semua jarak/celah antara rating yang berdekatan
+        gaps = [ratings[i+1] - ratings[i] for i in range(n - 1)]
+        # Cari indeks dari celah yang paling besar
+        max_gap_index = np.argmax(gaps)
+        max_gap_value = gaps[max_gap_index]
+    else: # Kasus khusus jika hanya ada 2 rating
+        max_gap_index = 0
+        max_gap_value = ratings[1] - ratings[0]
+
+    # 3. Jika celah cukup besar (di atas 0.3), pisahkan data menjadi dua kelompok
+    if max_gap_value > 0.3:
+        # Kelompok 1: dari awal sampai ke lokasi celah terbesar
+        cluster1 = ratings[:max_gap_index + 1]
+        # Kelompok 2: sisa datanya
+        cluster2 = ratings[max_gap_index + 1:]
+        
+        # 4. Tentukan kelompok mana yang merupakan konsensus (mayoritas)
+        if len(cluster1) > len(cluster2):
+            consensus_cluster = cluster1
+            outlier_cluster = cluster2
+        elif len(cluster2) > len(cluster1):
+            consensus_cluster = cluster2
+            outlier_cluster = cluster1
+        else:
+            # Jika jumlah anggota sama, pilih kelompok dengan nilai rata-rata lebih tinggi
+            consensus_cluster = cluster2 if sum(cluster2) > sum(cluster1) else cluster1
+            outlier_cluster = cluster1 if consensus_cluster is cluster2 else cluster2
+
+        # 5. Hitung skor akhir dari kelompok konsensus + penalti dari jumlah outlier
+        filtered_avg = sum(consensus_cluster) / len(consensus_cluster)
+        outlier_penalty = min(0.1, len(outlier_cluster) * 0.005) # Maksimal penalti 0.2
+        
+        return round(max(0.0, filtered_avg - outlier_penalty), 4)
+    else:
+        # Jika tidak ada celah yang signifikan (semua rating kompak), pakai rata-rata biasa
+        return round(sum(ratings) / n, 4)
 
 # === Routes ===
 @app.get("/")
@@ -101,17 +121,7 @@ def calculate_trust(data: TrustUpdateInput):
         indirect_trust = 0.0
 
     # 3. Centrality score dari jumlah koneksi unik
-    unique = data.centrality_raw
-    if unique <= 1:
-        centrality = 0.2
-    elif unique <= 20:
-        centrality = 0.2 + 0.3 * ((unique - 1) / 19)
-    elif unique <= 50:
-        centrality = 0.5 + 0.2 * ((unique - 20) / 30)
-    elif unique <= 100:
-        centrality = 0.7 + 0.3 * ((unique - 50) / 50)
-    else:
-        centrality = 1.0
+    centrality = calculate_log_centrality(data.centrality_raw)
 
     # 4. Hitung trust baru
     updated = calculate_updated_trust(
@@ -134,13 +144,9 @@ def security_evaluate(data: SecurityEvaluateInput):
     flood_result = evaluate_flooding_risk(
         recent_connections=data.conn_count_last_minute,
         is_coordinator=data.is_coordinator,
-        device_count=data.total_active_devices
     )
     
     return {
         "penalty": flood_result["penalty"],
-        "blacklisted": flood_result["is_flooding"] and flood_result["risk_level"] == "severe",
-        "risk_level": flood_result["risk_level"],
-        "threshold_used": flood_result["threshold"],
-        "connections_detected": data.conn_count_last_minute
+        "threshold_used": flood_result["threshold"]
     }

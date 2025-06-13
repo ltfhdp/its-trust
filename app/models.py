@@ -22,6 +22,7 @@ class Device(Base):
     is_active = Column(Boolean, default=True)
     left_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+    blacklisted_at = Column(DateTime, nullable=True)
 
     trust_history = relationship("TrustHistory", back_populates="device", cascade="all, delete-orphan", foreign_keys="[TrustHistory.device_id]")
     connections_initiated = relationship("Connection", back_populates="source_device", foreign_keys='Connection.source_device_id')

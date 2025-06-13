@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
+import logging
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -88,23 +89,23 @@ def leave_device(device_id: str, db: Session = Depends(get_db)):
 @app.post("/connect")
 def connect_device(conn: ConnectionCreate, db: Session = Depends(get_db)):
     try:
-        print(f"📡 CONNECT: {conn.device_id} → {conn.connected_device_id}, type={conn.connection_type}, status={conn.status}")
-        result = data_service.record_connection(
-            db,
-            source_id=conn.device_id,
-            target_id=conn.connected_device_id,
-            status=conn.status,
-            connection_type=conn.connection_type
-        )
-        if isinstance(result, dict) and result.get("status") == "failed":
-            raise HTTPException(status_code=400, detail=result.get("reason"))
-        return {"message": "Connection recorded and trust updated"}
-    except HTTPException as e:
-        raise e
+        print(f"CONNECT: {conn.device_id} → {conn.connected_device_id}, type={conn.connection_type}, status={conn.status}")
+        
+        # Convert to format expected by merged function
+        connection_data = {
+            "source_id": conn.device_id,
+            "target_id": conn.connected_device_id,
+            "status": conn.status,
+            "connection_type": conn.connection_type
+        }
+        
+        result = data_service.record_connection(db, connection_data)
+        return result
+        
     except Exception as e:
-        print(f"❌ ERROR: {e}")
+        print(f"Connection error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
+    
 @app.get("/devices/")
 def list_devices(db: Session = Depends(get_db)):
     devices = db.query(models.Device).options(joinedload(models.Device.connections_received)).all()

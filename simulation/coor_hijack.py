@@ -1,81 +1,100 @@
-# test_scenario_4_coordinator_hijack.py
 import random
 import time
 from test_utils import (
     reset_database, initialize_devices, create_connection,
-    rate_peer, get_coordinator_id, get_all_devices
+    rate_peer, get_all_devices, get_reputation, get_coordinator_id
 )
 
+def calculate_smart_score(target_id: str, connection_success: bool) -> float:
+    """Memberikan rating cerdas berdasarkan info reputasi dari API."""
+    target_reputation = get_reputation(target_id)
+    if not target_reputation or not target_reputation.get("exists"): return 0.5
+    
+    base_score = random.uniform(0.7, 1.0) if connection_success else random.uniform(0.1, 0.4)
+    level = target_reputation.get("reputation_level", "AVERAGE")
+
+    if level == "BLACKLISTED": return min(base_score, 0.1)
+    if level == "VERY_SUSPICIOUS": return min(base_score, 0.15)
+    if level == "SUSPICIOUS": return min(base_score, random.uniform(0.3, 0.5))
+    if level == "POOR": return base_score * 0.9
+    return round(max(0.0, min(1.0, base_score)), 2)
+
 def run_simulation():
-    print("🚀 SCENARIO 4: COORDINATOR HIJACK ATTEMPT")
+    print("🚀 SCENARIO: Coordinator Hijack Attack")
     reset_database()
-    
-    # Pastikan ada beberapa RSU internal sebagai kandidat koordinator yang kuat
+
+    # 1. Inisialisasi dengan 20% device jahat
     all_ids, malicious_ids = initialize_devices(total=15, malicious_ratio=0.2)
-    # Penyerang adalah salah satu device jahat
-    hijacker = random.choice(list(malicious_ids))
-    allies = malicious_ids - {hijacker}
+    normal_ids = list(set(all_ids) - malicious_ids)
 
-    print(f"\n👑 Initial Coordinator: {get_coordinator_id()}")
-    print(f"🦹‍♂️ Attacker (Hijacker): {hijacker}")
-    print(f"👥 Hijacker's Allies: {list(allies)}")
-    
-    print("\n🔄 --- Simulating hijack attempt ---")
-    for i in range(8):
-        current_coord = get_coordinator_id()
-        print(f"\n--- Iteration {i+1} | Current Coordinator: {current_coord} ---")
+    # 2. Fase Operasi Normal untuk memilih koordinator awal
+    print("\n🔄 --- Phase 1: Normal Operation (Initial Coordinator Election) ---")
+    for _ in range(20):
+        rater, target = random.sample(all_ids, 2)
+        create_connection(rater, target, True)
+        rate_peer(rater, target, calculate_smart_score(target, True))
 
-        # --- FASE SERANGAN ---
-        # 1. Naikkan trust si hijacker (kolusi)
-        for ally in allies:
-            # Saling memberi rating tinggi
-            rate_peer(ally, hijacker, 1.0)
-            rate_peer(hijacker, ally, 1.0)
-            # Saling membuat koneksi sukses
-            create_connection(ally, hijacker, success=True)
+    initial_coordinator = get_coordinator_id()
+    if not initial_coordinator:
+        print("❌ Failed to elect an initial coordinator. Stopping simulation.")
+        return
+    print(f"\n👑 Initial Coordinator Elected: {initial_coordinator}")
 
-        # 2. Jatuhkan trust koordinator saat ini (jika bukan hijacker)
-        if current_coord and current_coord != hijacker:
-            print(f"  -> Attacking current coordinator {current_coord}")
-            for attacker in malicious_ids:
-                # Beri rating buruk ke koordinator
-                rate_peer(attacker, current_coord, 0.1)
-                # Buat koneksi gagal ke koordinator
-                create_connection(attacker, current_coord, success=False)
-                # Karena koneksi gagal, koordinator (device normal) akan memberi rating jujur (rendah)
-                honest_low_score = round(random.uniform(0.1, 0.3), 2)
-                print(f"  -> 👑 {current_coord} rates attacker {attacker} back with {honest_low_score:.2f}")
-                rate_peer(current_coord, attacker, honest_low_score)
-        
-        # 3. Aktivitas normal oleh device lain
-        for _ in range(10):
-            src, tgt = random.sample(all_ids, 2)
-            if src not in malicious_ids and tgt not in malicious_ids:
-                create_connection(src, tgt, success=True)
-        
-        time.sleep(2)
-        
-        new_coord = get_coordinator_id()
-        if new_coord != current_coord:
-            print(f"👑👑👑 COORDINATOR CHANGE: {current_coord} -> {new_coord} 👑👑👑")
-            if new_coord == hijacker:
-                print("🔥🔥🔥 HIJACK SUCCESSFUL! ATTACKER IS THE NEW COORDINATOR! 🔥🔥🔥")
-                break
-    
+    # 3. Fase Serangan Hijack
+    print("\n\n⚔️ --- Phase 2: Coordinator Hijack Attack --- ⚔️")
+    for i in range(5): # Serangan berjalan selama 5 ronde
+        print(f"\n--- Attack Round {i+1} ---")
+        current_coordinator = get_coordinator_id() or initial_coordinator
+
+        # Interaksi terjadi di seluruh jaringan
+        for _ in range(20):
+            rater = random.choice(all_ids)
+            target = random.choice(list(set(all_ids) - {rater}))
+            
+            create_connection(rater, target, success=True)
+
+            # Logika rating bergantung pada siapa rater-nya
+            if rater in malicious_ids:
+                if target == current_coordinator:
+                    # Targeted Bad-mouthing
+                    score = 0.0
+                    print(f"  -> ⚔️ Hijack: {rater} badmouths Coordinator {target} with {score}")
+                elif target in malicious_ids:
+                    # Collusion
+                    score = 1.0
+                    print(f"  -> 🤝 Collusion: {rater} boosts {target} with {score}")
+                else:
+                    # Badmouthing biasa
+                    score = 0.1
+                rate_peer(rater, target, score)
+            else: # Rater adalah device normal
+                score = calculate_smart_score(target, True)
+                rate_peer(rater, target, score)
+
+    # 4. Hasil Akhir
     print("\n" + "="*50)
-    print("📈 FINAL STATUS")
+    print("📈 FINAL SYSTEM STATUS (after Hijack Attack)")
     print("="*50)
-    print(f"Final Coordinator: {get_coordinator_id()}")
+    
+    final_coordinator = get_coordinator_id()
+    print(f"👑 Initial Coordinator: {initial_coordinator}")
+    print(f"👑 Final Coordinator:   {final_coordinator}")
+    if final_coordinator in malicious_ids:
+        print("🔥🔥🔥 HIJACK SUCCESSFUL! Coordinator has been compromised. 🔥🔥🔥")
+    elif initial_coordinator != final_coordinator:
+        print("🛡️ HIJACK FAILED, but coordinator was replaced by another normal device.")
+    else:
+        print("🛡️🛡️ HIJACK FAILED! The original coordinator remains in power. 🛡️🛡️")
+
     devices = get_all_devices()
     for dev in sorted(devices, key=lambda x: x['id']):
         status = "🔴 MALICIOUS" if dev['id'] in malicious_ids else "🟢 NORMAL   "
-        is_hijacker = "(HIJACKER)" if dev['id'] == hijacker else ""
-        blacklisted = " - BLACKLISTED ☠️" if dev['is_blacklisted'] else ""
-        print(f"- {dev['id']} {is_hijacker} ({status}): {dev['trust_score']:.3f}{blacklisted}")
-        
-    print("\n🏁 SCENARIO 4 COMPLETE")
-    print("Skenario ini berhasil jika koordinator TIDAK berpindah ke hijacker,")
-    print("membuktikan bahwa prioritas RSU/Internal efektif.")
+        flagged = "🚩 FLAGGED" if dev['is_flagged'] else ""
+        blacklisted = "☠️ BLACKLISTED" if dev['is_blacklisted'] else ""
+        coord_status = "👑 COORD" if dev['id'] == final_coordinator else ""
+        print(f"- {dev['id']} ({status}): {dev['trust_score']:.3f} | Suspicious: {dev['suspicious_count']:<2} {flagged} {blacklisted} {coord_status}")
+
+    print("\n🏁 HIJACK SCENARIO COMPLETE")
 
 if __name__ == "__main__":
     run_simulation()

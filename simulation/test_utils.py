@@ -46,6 +46,17 @@ def get_coordinator_id():
     except Exception:
         return None
 
+def get_reputation(device_id: str):
+    """Mengambil informasi reputasi device melalui API."""
+    try:
+        res = requests.get(f"{BASE_URL}/reputation/{device_id}")
+        if res.status_code == 200:
+            return res.json()
+    except Exception as e:
+        # print(f"❌ Error getting reputation for {device_id}: {e}")
+        pass
+    return {"exists": False}
+
 def register_device(device_id, device_type=None, ownership_type=None):
     """Mendaftarkan satu device."""
     if not device_type:

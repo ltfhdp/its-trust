@@ -23,6 +23,10 @@ class Device(Base):
     left_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     blacklisted_at = Column(DateTime, nullable=True)
+    suspicious_count = Column(Integer, default=0)
+    is_flagged = Column(Boolean, default=False)
+    last_suspicious_activity = Column(DateTime, nullable=True)
+    suspicious_reasons = Column(Text, nullable=True)                                  
 
     trust_history = relationship("TrustHistory", back_populates="device", cascade="all, delete-orphan", foreign_keys="[TrustHistory.device_id]")
     connections_initiated = relationship("Connection", back_populates="source_device", foreign_keys='Connection.source_device_id')
@@ -70,7 +74,7 @@ class PeerRating(Base):
     rated_device_id = Column(String, ForeignKey("devices.id"))
     timestamp = Column(DateTime, default=datetime.utcnow)
     score = Column(Float)  # 0.0 - 1.0
-    comment = Column(Text)
+    comment = Column(Text, nullable=True)
 
     rater = relationship("Device", back_populates="ratings_given", foreign_keys=[rater_device_id])
     rated = relationship("Device", back_populates="ratings_received", foreign_keys=[rated_device_id])

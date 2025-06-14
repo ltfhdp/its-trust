@@ -65,6 +65,16 @@ class TrustRecord(BaseModel):
     class Config:
         orm_mode = True
 
+class ReputationInfo(BaseModel):
+    exists: bool
+    trust_score: Optional[float] = None
+    is_blacklisted: Optional[bool] = None
+    is_flagged: Optional[bool] = None
+    suspicious_count: Optional[int] = None
+    reputation_level: Optional[str] = None
+    last_suspicious_activity: Optional[datetime] = None
+    recent_suspicious_types: Optional[List[str]] = None
+
 # === Routes ===
 @app.get("/")
 def root():
@@ -204,3 +214,15 @@ def get_log_activity(db: Session = Depends(get_db)):
 
     logs.sort(key=lambda x: x["timestamp"], reverse=True)
     return logs
+
+@app.get("/reputation/{device_id}", response_model=ReputationInfo)
+def get_reputation_endpoint(device_id: str, session: Session = Depends(get_db)):
+    """
+    Endpoint untuk mendapatkan informasi reputasi sebuah device.
+    """
+    reputation_info = data_service.get_device_reputation_info(session, device_id)
+    
+    if not reputation_info["exists"]:
+        raise HTTPException(status_code=404, detail=f"Device with id {device_id} not found")
+        
+    return reputation_info

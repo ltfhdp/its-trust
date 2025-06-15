@@ -33,7 +33,7 @@ def calculate_smart_score(target_id: str, connection_success: bool) -> float:
         adjusted_score = min(base_score, random.uniform(0.3, 0.5))
     elif reputation_level == "POOR":
         adjusted_score = base_score * 0.9
-    else: # GOOD, EXCELLENT, AVERAGE
+    else: # Trusted, EXCELLENT, AVERAGE
         adjusted_score = base_score
         
     return round(max(0.0, min(1.0, adjusted_score)), 2)

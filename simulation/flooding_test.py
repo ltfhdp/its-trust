@@ -27,19 +27,19 @@ def run_simulation():
     all_ids, malicious_ids = initialize_devices(total=15, malicious_ratio=0.2)
     normal_ids = list(set(all_ids) - malicious_ids)
     
-    # 2. Fase Operasi Normal (2 Ronde)
+     #2. Fase Operasi Normal (2 Ronde)
     print("\n🔄 --- Phase 1: Normal Network Operation ---")
     for i in range(2):
         print(f"\n--- Normal Round {i+1} ---")
         for _ in range(15):
-            rater, target = random.sample(normal_ids, 2)
-            create_connection(rater, target, success=True)
-            rate_peer(rater, target, calculate_smart_score(target, True))
-            rate_peer(target, rater, calculate_smart_score(rater, True))
+           rater, target = random.sample(normal_ids, 2)
+           create_connection(rater, target, success=True)
+           rate_peer(rater, target, calculate_smart_score(target, True))
+           rate_peer(target, rater, calculate_smart_score(rater, True))
     
     # 3. Fase Serangan Flooding
     print("\n\n🌊 --- Phase 2: Coordinated Flooding Attack --- 🌊")
-    for i in range(3): # Serangan berjalan selama 3 ronde
+    for i in range(4): # Serangan berjalan selama 3 ronde
         print(f"\n--- Attack Round {i+1} ---")
         # Device jahat melakukan flooding
         for attacker in malicious_ids:

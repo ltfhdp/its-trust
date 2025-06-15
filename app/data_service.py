@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from fastapi import HTTPException
 from .models import Device, Connection, TrustHistory, PeerRating
 import requests
-from sqlalchemy import case
+from sqlalchemy import case, select, func
 import logging
 import os
 
@@ -74,14 +74,37 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
         logger.debug(f"SKIP_UPDATE: Peer {peer.id} is blacklisted, skipping trust update for {device.id}")
         return
     
-    # mengambil 5 rating terbaru selain dari peer saat ini
-    ratings = session.query(PeerRating)\
+    # mengambil 15 rating terbaru selain dari peer saat ini
+    subquery = (
+        select(Connection.status)
+        .correlate(PeerRating)
+        .where(
+            ((Connection.source_device_id == PeerRating.rater_device_id) & (Connection.target_device_id == PeerRating.rated_device_id)) |
+            ((Connection.source_device_id == PeerRating.rated_device_id) & (Connection.target_device_id == PeerRating.rater_device_id))
+        )
+        .where (Connection.timestamp < PeerRating.timestamp)
+        .order_by(Connection.timestamp.desc())
+        .limit(1)
+        .as_scalar()
+    )
+    
+    results = session.query(
+        PeerRating.score,
+        subquery.label("connection_status")
+        )\
         .filter(PeerRating.rated_device_id == device.id)\
         .filter(PeerRating.rater_device_id != peer.id)\
+        .filter(subquery != None)\
         .order_by(PeerRating.timestamp.desc())\
         .limit(15)\
         .all()
-    rating_scores = [r.score for r in ratings]
+    
+    peer_evaluations = []
+    for score, status in results:
+        peer_evaluations.append({
+            "rating_score": score,
+            "interaction_was_successful": status
+        })
 
     # centrality dari jumlah source unik
     successful_peers_q = session.query(Connection.source_device_id)\
@@ -104,7 +127,7 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
         res = requests.post(f"{TRUST_SERVICE_URL}/trust/calculate", json={
             "last_trust": device.trust_score,
             "success": success,
-            "peer_ratings": rating_scores,
+            "peer_ratings": peer_evaluations,
             "centrality_raw": centrality_raw
         })
         result = res.json()

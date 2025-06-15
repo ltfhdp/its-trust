@@ -20,7 +20,7 @@ def run_simulation():
         for _ in range(15):
             src, tgt = random.sample(all_ids, 2)
             simulate_interaction(src, tgt, success=True) # <-- GUNAKAN FUNGSI BARU
-        time.sleep(1)
+        time.sleep(0.1)
         
     devices = get_all_devices()
     print("\nTrust scores after normal interaction:")
@@ -33,7 +33,7 @@ def run_simulation():
     
     # 4. Device yang keluar mencoba bergabung kembali
     print(f"\n↩️  Device {device_to_leave} trying to rejoin...")
-    time.sleep(1)
+    time.sleep(0.5)
     register_device(device_to_leave)
 
     # 5. Simulasi device 'bermasalah' yang sering gagal koneksi
@@ -46,7 +46,7 @@ def run_simulation():
             is_flaky_involved = flaky_device in [src, tgt]
             success = not (is_flaky_involved and random.random() < 0.7)
             simulate_interaction(src, tgt, success=success) # <-- GUNAKAN FUNGSI BARU DI SINI JUGA
-        time.sleep(1)
+        time.sleep(2.0)
 
     devices = get_all_devices()
     print("\nTrust scores after flaky device simulation:")

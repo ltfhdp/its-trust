@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
-from fastapi import HTTPException
 from .models import Device, Connection, TrustHistory, PeerRating
 import requests
 from sqlalchemy import case, select, func
@@ -165,7 +164,7 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
     except Exception as e:
         logger.error(f"Error contacting trust service: {e}")
 
-    # Blacklist jika skor di bawah ambang batas dan belum di-blacklist
+    # blacklist jika skor di bawah ambang batas dan belum di-blacklist
     if device.trust_score < TRUST_THRESHOLD and not device.is_blacklisted:
         blacklist_reason = f"Trust score ({device.trust_score:.3f}) fell below threshold ({TRUST_THRESHOLD})."
         blacklist_device(session, device, blacklist_reason)
@@ -225,7 +224,7 @@ def check_device_history(session: Session, device_id: str) -> dict:
             "initial_trust": new_initial_trust
         }
     
-    # Jika tidak ditemukan histori sama sekali
+    # jika tidak ditemukan histori sama sekali
     return {"status": "unknown", "can_join": True}
 
 def add_device(session: Session, device_data):
@@ -315,7 +314,6 @@ def add_peer_rating(session: Session, rater_id: str, rated_id: str, score: float
     if not rater or not rated:
         raise ValueError("Device not found")
     
-    # --- TAMBAHKAN PENJAGA GERBANG DI SINI ---
     if rater.is_blacklisted:
         logger.warning(f"BLACKLIST_VIOLATION: Blacklisted device {rater.id} attempted to rate {rated.id}. Action blocked.")
         raise ValueError(f"Device {rater.id} is blacklisted and cannot perform this action.")
@@ -324,7 +322,7 @@ def add_peer_rating(session: Session, rater_id: str, rated_id: str, score: float
         logger.warning(f"BLACKLIST_VIOLATION: Attempt to rate blacklisted device {rated.id}. Action blocked.")
         raise ValueError(f"Device {rated.id} is blacklisted and cannot be rated.")
     
-    # Cari koneksi terakhir antara kedua device ini
+    # cari koneksi terakhir antara kedua device ini
     last_interaction = session.query(Connection).filter(
         ((Connection.source_device_id == rater_id) & (Connection.target_device_id == rated_id)) |
         ((Connection.source_device_id == rated_id) & (Connection.target_device_id == rater_id))
@@ -332,24 +330,24 @@ def add_peer_rating(session: Session, rater_id: str, rated_id: str, score: float
 
     is_dishonest = False
     dishonest_type = None
-    log_reason = "" # Definisikan di luar untuk memastikan selalu ada
+    log_reason = "" 
 
     if last_interaction:
         last_status_success = last_interaction.status
 
-        # Kasus Bad-mouthing: Koneksi sukses tapi di-rate buruk
+        # badmouthing
         if last_status_success and score < 0.4 and not rated.is_flagged and not rated.is_blacklisted:
             is_dishonest = True
             dishonest_type = "badmouthing"
             log_reason = f"Bad-mouthing: Gave low score ({score}) to a reputable device after a successful connection."
             
-        # Kasus Kolusi: Koneksi gagal tapi di-rate baik
+        # collusion
         elif not last_status_success and score > 0.6:
             is_dishonest = True
             dishonest_type= "collusion"
             log_reason = f"Collusion: Gave high score ({score}) after a failed connection."
 
-    # 3. JIKA TIDAK JUJUR, LANGSUNG BERI PENALTI KE TRUST SCORE UTAMA
+    # PENALTI karena DISHONEST
     if is_dishonest:
         penalty = 0.15
         
@@ -359,15 +357,13 @@ def add_peer_rating(session: Session, rater_id: str, rated_id: str, score: float
         rater.last_suspicious_activity = datetime.utcnow()
 
         import json
-        # --- PERUBAHAN UTAMA DI SINI ---
-        # Mengganti nama variabel 'reason' menjadi 'reasons_list'
-        reasons_list = json.loads(rater.suspicious_reasons or "[]") # <-- UBAH DI SINI
-        reasons_list.append({ # <-- UBAH DI SINI
+        reasons_list = json.loads(rater.suspicious_reasons or "[]") 
+        reasons_list.append({ 
             "type": dishonest_type,
             "timestamp": datetime.utcnow().isoformat(),
             "details": log_reason
         })
-        rater.suspicious_reasons = json.dumps(reasons_list[-10:]) # <-- UBAH DI SINI
+        rater.suspicious_reasons = json.dumps(reasons_list[-10:]) 
 
         if rater.suspicious_count >= 3:
             rater.is_flagged = True
@@ -385,8 +381,6 @@ def add_peer_rating(session: Session, rater_id: str, rated_id: str, score: float
         )
         session.add(penalty_log)
 
-    # simpan rating yang baru masuk ke database
-    # 'reason' di sini akan merujuk ke parameter asli fungsi, bukan list yang diubah.
     rating = PeerRating(
         rater_device_id=rater_id, rated_device_id=rated_id, score=score, comment=reason
     )
@@ -395,12 +389,11 @@ def add_peer_rating(session: Session, rater_id: str, rated_id: str, score: float
     return rating
 
 def get_device_reputation_info(session: Session, device_id: str) -> dict:
-    """Mendapatkan informasi reputasi device"""
     device = session.get(Device, device_id)
     if not device:
         return {"exists": False}
     
-    # Parse suspicious reasons untuk analisis
+    # parse suspicious reasons untuk analisis
     import json
     reasons = json.loads(device.suspicious_reasons or "[]")
     recent_reasons = [r for r in reasons if r.get("type")]
@@ -413,11 +406,10 @@ def get_device_reputation_info(session: Session, device_id: str) -> dict:
         "suspicious_count": device.suspicious_count,
         "reputation_level": get_reputation_level(device),
         "last_suspicious_activity": device.last_suspicious_activity,
-        "recent_suspicious_types": [r["type"] for r in recent_reasons[-3:]]  # Last 3 types
+        "recent_suspicious_types": [r["type"] for r in recent_reasons[-3:]]  
     }
 
 def get_reputation_level(device: Device) -> str:
-    """Menentukan level reputasi"""
     if device.is_blacklisted:
         return "BLACKLISTED"
     elif device.is_flagged:
@@ -496,17 +488,15 @@ def record_connection(session: Session, connections, update_trust: bool = True):
             logger.error(f"UNREGISTERED ACCESS: {target_id} not found")
             continue
 
-        # --- PENAMBAHAN 'PENJAGA GERBANG' BLACKLIST ---
         if source.is_blacklisted or target.is_blacklisted:
             logger.warning(
                 f"BLACKLIST_VIOLATION: Connection between {source_id} (blacklisted: {source.is_blacklisted}) "
                 f"and {target_id} (blacklisted: {target.is_blacklisted}) was blocked."
             )
-            continue # Hentikan proses untuk koneksi ini dan lanjut ke koneksi berikutnya
+            continue 
 
         handle_flooding_check(session, source_id, source)
 
-        # Record connection
         conn = Connection(
             source_device_id=source_id,
             target_device_id=target_id,
@@ -547,7 +537,6 @@ def record_connection(session: Session, connections, update_trust: bool = True):
 
     session.commit()
     
-    # return appropriate response
     if len(connections) == 1:
         return {"message": "Connection recorded and trust updated"}
     else:
@@ -558,17 +547,17 @@ def select_coordinator(session: Session, old_coordinator_id: str = None):
     current_coordinator_obj = session.query(Device).filter_by(is_coordinator=True).first()
     old_coord_id = current_coordinator_obj.id if current_coordinator_obj else old_coordinator_id
     
-    # Reset 
+    # reset 
     session.query(Device).update({Device.is_coordinator: False})
     session.commit()
 
     logger.info("Selecting new coordinator...")
 
-    # Hanya internal devices - RSU internal > Computer internal berdasarkan trust
+    # hanya internal devices - RSU internal > Computer internal berdasarkan trust
     internal_coordinator = session.query(Device).filter(
         Device.is_blacklisted == False,
         Device.ownership_type == "internal",
-        Device.device_type.in_(["RSU", "Computer"]),  # High intelligence factor
+        Device.device_type.in_(["RSU", "Computer"]),  
         Device.trust_score >= TRUST_THRESHOLD,
         Device.is_active == True
     ).order_by(
@@ -578,22 +567,22 @@ def select_coordinator(session: Session, old_coordinator_id: str = None):
     ).first()
 
     if internal_coordinator:
-        # Jika ditemukan koordinator baru yang berbeda dari yang lama
+        # jika ditemukan koordinator baru yang berbeda dari yang lama
         if internal_coordinator.id != old_coord_id:
             internal_coordinator.is_coordinator = True
             session.commit()
             logger.info(f"Internal coordinator selected: {internal_coordinator.id} ({internal_coordinator.device_type})")
-            # log ke db
+         
             log_note = f"Elected as new community coordinator."
             if old_coord_id:
                 log_note += f" Replacing former coordinator {old_coord_id}."
             
             log_entry = TrustHistory(
-                device_id=internal_coordinator.id, # Log terikat pada device yang baru terpilih
+                device_id=internal_coordinator.id,
                 trust_score=internal_coordinator.trust_score,
                 connection_count=internal_coordinator.connection_count,
                 notes=log_note,
-                coordinator_id=old_coord_id # Catat siapa koordinator sebelumnya
+                coordinator_id=old_coord_id 
             )
             session.add(log_entry)
             session.commit()
@@ -609,23 +598,17 @@ def select_coordinator(session: Session, old_coordinator_id: str = None):
         session.commit()
     return None
 
-# Lokasi: data_service.py
-
 def blacklist_device(session: Session, device: Device, reason: str):
-    """
-    Fungsi terpusat untuk mem-blacklist device secara permanen.
-    """
     if device.is_blacklisted:
-        return # Jika sudah di-blacklist, tidak perlu melakukan apa-apa
+        return 
 
     logger.warning(f"BLACKLISTING: Device {device.id} is being blacklisted. Reason: {reason}")
     
     device.is_blacklisted = True
-    device.is_flagged = True # Pastikan juga di-flag
-    device.is_active = False # Nonaktifkan device, bagian dari "kick"
+    device.is_flagged = True 
+    device.is_active = False 
     device.blacklisted_at = datetime.utcnow()
 
-    # Catat kejadian ini di TrustHistory
     log_entry = TrustHistory(
         device_id=device.id,
         trust_score=device.trust_score,

@@ -1,12 +1,11 @@
 import random
 import time
 from test_utils import (
-    reset_database, initialize_devices, create_connection,
+    initialize_devices, create_connection,
     rate_peer, get_all_devices, get_reputation, get_coordinator_id
 )
 
 def calculate_smart_score(target_id: str, connection_success: bool) -> float:
-    """Memberikan rating cerdas berdasarkan info reputasi dari API."""
     target_reputation = get_reputation(target_id)
     if not target_reputation or not target_reputation.get("exists"): return 0.5
     
@@ -21,7 +20,6 @@ def calculate_smart_score(target_id: str, connection_success: bool) -> float:
 
 def run_simulation():
     print("🚀 SCENARIO: Coordinator Hijack Attack")
-    reset_database()
 
     # 1. Inisialisasi dengan 20% device jahat
     all_ids, malicious_ids = initialize_devices(total=15, malicious_ratio=0.2)

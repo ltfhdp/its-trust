@@ -2,13 +2,12 @@
 import random
 import time
 from test_utils import (
-    reset_database, initialize_devices, simulate_interaction, # Ganti create_connection dengan simulate_interaction
+    initialize_devices, simulate_interaction, # Ganti create_connection dengan simulate_interaction
     leave_device, register_device, get_all_devices
 )
 
 def run_simulation():
     print("🚀 SCENARIO 1: NORMAL LIFECYCLE (with mandatory peer rating)")
-    reset_database()
     
     # 1. Inisialisasi device, semua normal
     all_ids, _ = initialize_devices(total=10, malicious_ratio=0)

@@ -17,7 +17,7 @@ from logic import (
 
 app = FastAPI()
 
-# === Models ===
+# models
 class PeerEvaluation(BaseModel):
     rating_score: float
     interaction_was_successful: bool
@@ -30,8 +30,8 @@ class TrustInitInput(BaseModel):
 class TrustUpdateInput(BaseModel):
     last_trust: float
     success: bool
-    peer_evaluations: Optional[List[PeerEvaluation]] = None  # list of scores from 0.0 to 1.0
-    centrality_raw: int = 0  # number of unique connections
+    peer_evaluations: Optional[List[PeerEvaluation]] = None  
+    centrality_raw: int = 0  # jumlah koneksi unik
     rater_id: Optional[str] = None
     rated_id: Optional[str] = None
 
@@ -46,30 +46,27 @@ def calculate_validated_indirect_trust(peer_evaluations: List[PeerEvaluation]) -
 
     valid_ratings = []
     for evaluation in peer_evaluations:
-        # Aturan 1: Rating positif (>= 0.5) hanya valid jika interaksi sebelumnya sukses.
+        # rating >= 0.5 hanya valid jika interaksi sebelumnya sukses
         is_positive_rating_valid = (
             evaluation.rating_score >= 0.5 and
             evaluation.interaction_was_successful
         )
 
-        # Aturan 2: Rating negatif (< 0.5) hanya valid jika interaksi sebelumnya gagal.
+        # rating < 0.5 hanya valid jika interaksi sebelumnya gagal
         is_negative_rating_valid = (
             evaluation.rating_score < 0.5 and
             not evaluation.interaction_was_successful
         )
 
-        # Jika salah satu aturan terpenuhi, rating dianggap valid.
         if is_positive_rating_valid or is_negative_rating_valid:
             valid_ratings.append(evaluation.rating_score)
 
-    # Jika tidak ada rating yang dianggap valid setelah divalidasi, skornya 0.
     if not valid_ratings:
         return 0.0
 
-    # Kembalikan nilai rata-rata dari rating yang terbukti valid.
     return round(sum(valid_ratings) / len(valid_ratings), 4)
 
-# === Routes ===
+# routes
 @app.get("/")
 def root():
     return {"message": "Trust Service"}
@@ -90,10 +87,10 @@ def computing_weight(device_type: str):
 
 @app.post("/trust/calculate")
 def calculate_trust(data: TrustUpdateInput):
-    # 1. Direct trust (dari hasil interaksi)
+    # 1. Direct Observation
     direct_trust = get_direct_trust_score(data.success)
 
-    # 2. Enhanced Indirect trust dengan outlier detection
+    # 2. Indirect Observation
     if data.peer_evaluations:
         indirect_trust = calculate_validated_indirect_trust(data.peer_evaluations)
     else:

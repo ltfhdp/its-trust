@@ -3,7 +3,6 @@ import random
 import time
 import os
 
-# --- Default Settings ---
 BASE_URL = "http://localhost:8000"
 TOTAL_DEVICES = 10
 MALICIOUS_PERCENT = 0.25
@@ -15,21 +14,8 @@ DEVICE_BEHAVIOR = {
     "Smart Device": ["request_update"],
     "RFID": ["send_identity"]
 }
-
-# --- Utility Functions ---
-
-def reset_database():
-    """Menghapus file database untuk memastikan pengujian yang bersih."""
-    db_file = "trust_system.db"
-    if os.path.exists(db_file):
-        try:
-            os.remove(db_file)
-            print(f"\n🗑️  Database '{db_file}' has been reset.")
-        except OSError as e:
-            print(f"Error removing database file {db_file}: {e}")
             
 def get_all_devices():
-    """Mengambil semua device yang terdaftar."""
     try:
         res = requests.get(f"{BASE_URL}/devices/")
         if res.status_code == 200:
@@ -39,7 +25,6 @@ def get_all_devices():
     return []
     
 def get_coordinator_id():
-    """Mendapatkan ID koordinator saat ini."""
     try:
         res = requests.get(f"{BASE_URL}/coordinator")
         return res.json()["id"] if res.status_code == 200 else None
@@ -47,18 +32,15 @@ def get_coordinator_id():
         return None
 
 def get_reputation(device_id: str):
-    """Mengambil informasi reputasi device melalui API."""
     try:
         res = requests.get(f"{BASE_URL}/reputation/{device_id}")
         if res.status_code == 200:
             return res.json()
     except Exception as e:
-        # print(f"❌ Error getting reputation for {device_id}: {e}")
         pass
     return {"exists": False}
 
 def register_device(device_id, device_type=None, ownership_type=None):
-    """Mendaftarkan satu device."""
     if not device_type:
         device_type = random.choice(list(DEVICE_BEHAVIOR.keys()))
     if not ownership_type:
@@ -70,14 +52,14 @@ def register_device(device_id, device_type=None, ownership_type=None):
         "ownership_type": ownership_type,
         "device_type": device_type,
         "memory_gb": random.choice([2, 4, 8]),
-        "location": random.choice(["Intersection-A", "Highway-B", "Downtown-C"])
+        "location": random.choice(["A", "B", "C"])
     }
     try:
         res = requests.post(f"{BASE_URL}/device", json=payload)
         if res.status_code == 200:
             print(f"📥  Register OK: {device_id} ({device_type})")
             return res.json()
-        elif res.status_code == 403: # Rejoin failed
+        elif res.status_code == 403: # rejoin failed
             print(f"⚠️  Rejoin FAILED: {device_id} - {res.json().get('detail')}")
             return None
         else:
@@ -88,7 +70,6 @@ def register_device(device_id, device_type=None, ownership_type=None):
         return None
 
 def initialize_devices(total=TOTAL_DEVICES, malicious_ratio=MALICIOUS_PERCENT):
-    """Mendaftarkan semua device awal dan mengklasifikasikannya."""
     device_ids = [f"dev-{i:03}" for i in range(total)]
     malicious_count = int(total * malicious_ratio)
     
@@ -97,12 +78,11 @@ def initialize_devices(total=TOTAL_DEVICES, malicious_ratio=MALICIOUS_PERCENT):
     for dev_id in rsu_ids:
         register_device(dev_id, device_type="RSU", ownership_type="internal")
     
-    # Sisa device
     other_devices = device_ids[3:]
     for dev_id in other_devices:
         register_device(dev_id)
 
-    # Pilih device jahat dari non-RSU
+    # pilih device jahat dari non-RSU
     malicious_ids = set(random.sample(other_devices, min(malicious_count, len(other_devices))))
     
     print("\n" + "="*50)
@@ -115,7 +95,6 @@ def initialize_devices(total=TOTAL_DEVICES, malicious_ratio=MALICIOUS_PERCENT):
     return device_ids, malicious_ids
 
 def create_connection(src, tgt, success=True):
-    """Membuat satu koneksi antar device."""
     payload = {
         "device_id": src,
         "connected_device_id": tgt,
@@ -125,12 +104,10 @@ def create_connection(src, tgt, success=True):
     try:
         res = requests.post(f"{BASE_URL}/connect", json=payload)
         status_icon = "✅" if success else "❌"
-        # print(f"  {src} ↔️ {tgt} | Connection {status_icon} -> {res.status_code}")
     except Exception as e:
         print(f"💥 ERROR creating connection: {e}")
 
 def rate_peer(rater, target, score):
-    """Memberikan rating ke device lain."""
     payload = { "rater_device_id": rater, "rated_device_id": target, "score": score }
     try:
         res = requests.post(f"{BASE_URL}/rate_peer/", json=payload)
@@ -139,10 +116,6 @@ def rate_peer(rater, target, score):
         print(f"💥 ERROR rating peer: {e}")
 
 def simulate_interaction(src, tgt, success):
-    """
-    Mensimulasikan satu interaksi lengkap: koneksi + rating dua arah.
-    Ini adalah fungsi utama yang akan digunakan untuk interaksi normal.
-    """
     # 1. Buat koneksi
     create_connection(src, tgt, success=success)
     
@@ -160,7 +133,6 @@ def simulate_interaction(src, tgt, success):
     rate_peer(tgt, src, score_tgt_to_src)
         
 def leave_device(device_id):
-    """Device keluar dari jaringan secara normal."""
     try:
         res = requests.post(f"{BASE_URL}/device/{device_id}/leave")
         if res.status_code == 200:

@@ -1,27 +1,21 @@
 import random
 import time
 from test_utils import (
-    reset_database, initialize_devices, create_connection,
+    initialize_devices, create_connection,
     rate_peer, get_all_devices, get_reputation
 )
 
 def calculate_smart_score(target_id: str, connection_success: bool) -> float:
-    """
-    Memberikan rating cerdas berdasarkan info reputasi yang diambil dari API.
-    Device normal akan menggunakan fungsi ini untuk menentukan skor.
-    """
     target_reputation = get_reputation(target_id)
     
     if not target_reputation or not target_reputation.get("exists"):
-        return 0.5  # Skor default jika device tidak ditemukan
+        return 0.5  
 
-    # Skor dasar berdasarkan hasil koneksi
     if connection_success:
         base_score = random.uniform(0.7, 1.0)
     else:
         base_score = random.uniform(0.1, 0.4)
         
-    # Penyesuaian berdasarkan level reputasi dari backend
     reputation_level = target_reputation.get("reputation_level", "AVERAGE")
         
     if reputation_level == "BLACKLISTED":
@@ -29,24 +23,17 @@ def calculate_smart_score(target_id: str, connection_success: bool) -> float:
     elif reputation_level == "VERY_SUSPICIOUS":
         adjusted_score = min(base_score, 0.15)
     elif reputation_level == "SUSPICIOUS":
-        # Beri penalti sedang untuk yang sudah di-flag
         adjusted_score = min(base_score, random.uniform(0.3, 0.5))
     elif reputation_level == "POOR":
         adjusted_score = base_score * 0.9
-    else: # Trusted, EXCELLENT, AVERAGE
+    else: 
         adjusted_score = base_score
         
     return round(max(0.0, min(1.0, adjusted_score)), 2)
 
 
 def run_simulation():
-    """
-    Skenario Badmouthing:
-    - Device Jahat: Selalu memberi skor rendah (tanpa kolusi).
-    - Device Normal: Memberi skor menggunakan Smart Rating.
-    """
     print("🚀 SCENARIO 2 (Hybrid): Badmouthing with Smart Rating (No Collusion)")
-    reset_database()
     
     all_ids, malicious_ids = initialize_devices()
     

@@ -2,7 +2,7 @@ import random
 import time
 from concurrent.futures import ThreadPoolExecutor
 from test_utils import (
-    reset_database, initialize_devices, create_connection,
+    initialize_devices, create_connection,
     rate_peer, get_all_devices, get_reputation, register_device, leave_device
 )
 
@@ -33,7 +33,6 @@ def flooding_parallel(attacker_id, normal_ids, count=30, max_workers=10):
 
 def run_simulation():
     print("🚀 SCENARIO: Refactored Flooding Attack")
-    reset_database()
 
     all_ids, malicious_ids = initialize_devices(total=15, malicious_ratio=0.2)
     normal_ids = list(set(all_ids) - malicious_ids)

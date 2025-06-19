@@ -3,7 +3,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session, joinedload
 from .database import SessionLocal, engine
-from app import models, data_service
+from app import models, services
 from pydantic import BaseModel
 from typing import List, Optional
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,7 +29,7 @@ def get_db():
     finally:
         db.close()
 
-# === Schemas ===
+# schemas
 class DeviceCreate(BaseModel):
     id: str
     name: str
@@ -75,7 +75,7 @@ class ReputationInfo(BaseModel):
     last_suspicious_activity: Optional[datetime] = None
     recent_suspicious_types: Optional[List[str]] = None
 
-# === Routes ===
+# routes
 @app.get("/")
 def root():
     return {"message": "ITS Trust Backend"}
@@ -83,7 +83,7 @@ def root():
 @app.post("/device")
 def add_device(device: DeviceCreate, db: Session = Depends(get_db)):
     try:
-        result = data_service.add_device(db, device)
+        result = services.add_device(db, device)
         return result
     except ValueError as e:
         raise HTTPException(status_code=403, detail=str(e))
@@ -91,7 +91,7 @@ def add_device(device: DeviceCreate, db: Session = Depends(get_db)):
 @app.post("/device/{device_id}/leave")
 def leave_device(device_id: str, db: Session = Depends(get_db)):
     try:
-        data_service.leave_device(db, device_id)
+        services.leave_device(db, device_id)
         return {"message": f"Device {device_id} has left the system."}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -101,7 +101,6 @@ def connect_device(conn: ConnectionCreate, db: Session = Depends(get_db)):
     try:
         print(f"CONNECT: {conn.device_id} → {conn.connected_device_id}, type={conn.connection_type}, status={conn.status}")
         
-        # Convert to format expected by merged function
         connection_data = {
             "source_id": conn.device_id,
             "target_id": conn.connected_device_id,
@@ -109,7 +108,7 @@ def connect_device(conn: ConnectionCreate, db: Session = Depends(get_db)):
             "connection_type": conn.connection_type
         }
         
-        result = data_service.record_connection(db, connection_data)
+        result = services.record_connection(db, connection_data)
         return result
         
     except Exception as e:
@@ -148,13 +147,13 @@ def get_trust_history_by_coordinator(coordinator_id: str, db: Session = Depends(
 @app.post("/rate_peer/")
 def rate_peer(rating: PeerRatingCreate, db: Session = Depends(get_db)):
     try:
-        data_service.add_peer_rating(
+        services.add_peer_rating(
             db, 
             rating.rater_device_id, 
             rating.rated_device_id, 
             rating.score,
             reason=rating.comment,
-            update_trust=rating.update_trust  # Set default
+            update_trust=rating.update_trust  
         )
         return {"message": "Peer rating recorded"}
     except Exception as e:
@@ -201,7 +200,7 @@ def get_log_activity(db: Session = Depends(get_db)):
             "connection_status": status_detail
         })
 
-    # PeerRating (optional)
+    # PeerRating 
     rating_entries = db.query(models.PeerRating).all()
     for r in rating_entries:
         logs.append({
@@ -220,7 +219,7 @@ def get_reputation_endpoint(device_id: str, session: Session = Depends(get_db)):
     """
     Endpoint untuk mendapatkan informasi reputasi sebuah device.
     """
-    reputation_info = data_service.get_device_reputation_info(session, device_id)
+    reputation_info = services.get_device_reputation_info(session, device_id)
     
     if not reputation_info["exists"]:
         raise HTTPException(status_code=404, detail=f"Device with id {device_id} not found")

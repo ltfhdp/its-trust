@@ -38,7 +38,7 @@ def get_memory_weight(memory_gb: float) -> float:
 def calculate_initial_trust(ownership_type: str, memory_gb: float, device_type: str) -> float:
     if ownership_type.lower() == "internal":
         mem_weight = get_memory_weight(memory_gb)
-        comp_weight = get_computing_weight(device_type)  # default RSU for internal
+        comp_weight = get_computing_weight(device_type) 
         relationship_factor = 1
         return round(0.5*relationship_factor + 0.5*((mem_weight + comp_weight) / 2), 3)
     else:
@@ -48,18 +48,9 @@ def get_direct_trust_score(success: bool) -> float:
     return 0.01 if success else -0.01
 
 def calculate_log_centrality(unique_connections: int) -> float:
-    """
-    Menghitung skor sentralitas menggunakan skala logaritmik.
-    Ini memberikan kenaikan yang cepat di awal dan melambat di akhir.
-    """
-    # --- Parameter yang bisa Anda tuning ---
-    # Jumlah koneksi di mana skor dianggap maksimal.
     MAX_CONNECTIONS = 100.0
-    # Skor minimal untuk 1 koneksi (untuk mengatasi cold start).
-    MIN_SCORE = 0.30
-    # Skor maksimal yang bisa dicapai.
+    MIN_SCORE = 0.30 #untuk 1 koneksi
     MAX_SCORE = 1.0
-    # ------------------------------------
 
     if unique_connections <= 0:
         return 0.0
@@ -68,15 +59,12 @@ def calculate_log_centrality(unique_connections: int) -> float:
     if unique_connections >= MAX_CONNECTIONS:
         return MAX_SCORE
 
-    # Logaritma dari nilai saat ini dan nilai maksimal.
-    # Menggunakan log(koneksi) agar skalanya logaritmik.
+    # logaritma dari nilai saat ini dan nilai maksimal
     log_unique = math.log(unique_connections)
     log_max = math.log(MAX_CONNECTIONS)
 
-    # Lakukan interpolasi pada skala logaritmik.
+    # interpolasi dengan skala logaritmik
     scale = log_unique / log_max
-    
-    # Hitung skor akhir berdasarkan skala.
     score = MIN_SCORE + (MAX_SCORE - MIN_SCORE) * scale
     
     return round(score, 3)
@@ -110,16 +98,14 @@ def evaluate_flooding_risk(recent_connections: int, is_coordinator: bool, device
     threshold = get_flooding_threshold(is_coordinator, device_count)
     
     if recent_connections > threshold:
-        # Flooding detected - hanya penalty
         overflow_ratio = recent_connections / threshold
-        penalty = min(0.2, 0.05 * overflow_ratio)  # Max penalty 0.2
+        penalty = min(0.2, 0.05 * overflow_ratio)  # max penalti 0.2
         
         return {
             "penalty": penalty,
             "threshold": threshold
         }
     else:
-        # Normal
         return {
             "penalty": 0.0,
             "threshold": threshold

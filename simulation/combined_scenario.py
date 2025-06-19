@@ -1,13 +1,12 @@
 import random
 import time
 from test_utils import (
-    reset_database, initialize_devices, create_connection,
+    initialize_devices, create_connection,
     rate_peer, get_coordinator_id, get_all_devices
 )
 
 def run_simulation():
     print("🚀 SCENARIO 5: COMBINED ATTACK (CHAOS MODE)")
-    reset_database()
     
     all_ids, malicious_ids = initialize_devices(total=25, malicious_ratio=0.3)
     

@@ -94,8 +94,8 @@ def calculate_trust(data: TrustUpdateInput):
     direct_trust = get_direct_trust_score(data.success)
 
     # 2. Enhanced Indirect trust dengan outlier detection
-    if data.peer_ratings:
-        indirect_trust = calculate_validated_indirect_trust(data.peer_ratings)
+    if data.peer_evaluations:
+        indirect_trust = calculate_validated_indirect_trust(data.peer_evaluations)
     else:
         indirect_trust = 0.0
 
@@ -107,7 +107,8 @@ def calculate_trust(data: TrustUpdateInput):
         last_trust=data.last_trust,
         direct_trust=direct_trust,
         indirect_trust=indirect_trust,
-        centrality_score=centrality
+        centrality_score=centrality,
+        centrality_raw=data.centrality_raw
     )
 
     return {

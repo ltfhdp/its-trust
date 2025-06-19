@@ -178,8 +178,14 @@ tr:hover {
 }
 
 .danger {
-  background-color: #fef2f2;
+  background-color: #f8d7da;
+
 }
+
+.warning {
+  background-color: #fff3cd;
+}
+
 .submit-btn {
   margin-top: 16px;
   margin-bottom: 20px; /* ini yang nambah jarak bawah */

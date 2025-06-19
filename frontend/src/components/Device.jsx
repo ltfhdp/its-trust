@@ -83,6 +83,7 @@ export default function DevicePage() {
               <th>Location</th>
               <th>Trust</th>
               <th>Blacklist</th>
+              <th>Flagged</th>
               <th>Coordinator</th>
               <th>Active</th>
               <th>Left At</th>
@@ -91,7 +92,7 @@ export default function DevicePage() {
           </thead>
           <tbody>
             {devices.map(d => (
-              <tr key={d.id} className={d.trust_score < 0.3 ? "danger" : ""}>
+              <tr key={d.id} className={d.trust_score < 0.3 ? "danger" : d.is_flagged ? "warning" : ""}>
                 <td>{d.id}</td>
                 <td>{d.name}</td>
                 <td>{d.device_type}</td>
@@ -100,6 +101,7 @@ export default function DevicePage() {
                 <td>{d.location}</td>
                 <td>{d.trust_score.toFixed(3)}</td>
                 <td>{d.is_blacklisted ? "Yes" : "No"}</td>
+                <td>{d.is_flagged ? "Yes" : "No"}</td>
                 <td>{d.is_coordinator ? "Yes" : "No"}</td>
                 <td>{d.is_active ? "Active" : "Left"}</td>
                 <td>{d.left_at ? new Date(d.left_at).toLocaleString() : "-"}</td>

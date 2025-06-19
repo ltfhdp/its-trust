@@ -127,7 +127,7 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
         res = requests.post(f"{TRUST_SERVICE_URL}/trust/calculate", json={
             "last_trust": device.trust_score,
             "success": success,
-            "peer_ratings": peer_evaluations,
+            "peer_evaluations": peer_evaluations,
             "centrality_raw": centrality_raw
         })
         result = res.json()
@@ -454,7 +454,7 @@ def handle_flooding_check(session: Session, source_id: str, source: Device):
         reason = json.loads(source.suspicious_reasons or "[]")
         reason.append({
             "type": "flooding",
-            "timestamp": datetime.utc().isoformat(),
+            "timestamp": datetime.utcnow().isoformat(),
             "details": f"Recent connections: {recent_conn}"
         })
         source.suspicious_reasons = json.dumps(reason[-10:])

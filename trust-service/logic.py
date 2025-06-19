@@ -86,6 +86,7 @@ def calculate_updated_trust(
     direct_trust: float,
     indirect_trust: float,
     centrality_score: float,
+    centrality_raw: int
 ) -> float:
     
     td = last_trust + direct_trust
@@ -93,14 +94,17 @@ def calculate_updated_trust(
     if indirect_trust is not None and indirect_trust > 0:
         t_updated = (0.4 * td) + (0.3 * indirect_trust) + (0.3 * centrality_score)
     else:
-        t_updated = (0.7 * td) + (0.3 * centrality_score)
+        if centrality_raw <= 1:
+            t_updated = (0.7 * td) + (0.3 * centrality_score)
+        else:
+            t_updated = (0.4 * td) + (0.3 * indirect_trust) + (0.3 * centrality_score)
     return min(max(round(t_updated, 3), 0.0), 1.0)
 
 def should_blacklist(trust_score: float, threshold: float = 0.3) -> bool:
     return trust_score < threshold
 
 def get_flooding_threshold(is_coordinator: bool, device_count: int = 0) -> int:
-    return 30 if is_coordinator else 15
+    return 24 if is_coordinator else 12
 
 def evaluate_flooding_risk(recent_connections: int, is_coordinator: bool, device_count: int = 0) -> dict:
     threshold = get_flooding_threshold(is_coordinator, device_count)

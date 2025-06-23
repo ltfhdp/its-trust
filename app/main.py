@@ -3,7 +3,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session, joinedload
 from .database import SessionLocal, engine
-from app import models, services
+from . import models, services
 from pydantic import BaseModel
 from typing import List, Optional
 from fastapi.middleware.cors import CORSMiddleware

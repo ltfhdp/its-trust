@@ -3,7 +3,7 @@ import random
 import time
 import os
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 TOTAL_DEVICES = 10
 MALICIOUS_PERCENT = 0.25
 DEVICE_BEHAVIOR = {

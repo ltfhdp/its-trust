@@ -1,0 +1,52 @@
+services:
+  backend:
+    build:
+      context: .  
+      dockerfile: app/Dockerfile 
+    container_name: its-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+      - ./results/${SIMULATION_NAME}/trust_system.db:/app/trust_system.db
+      - ./results/${SIMULATION_NAME}/trust_system.log:/app/trust_system.log
+    environment:
+      - TRUST_SERVICE_URL=http://trust-service:8001
+    depends_on:
+      - trust-service
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: its-frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+
+  trust-service:
+    build:
+      context: .
+      dockerfile: trust-service/Dockerfile
+    container_name: its-trust-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./trust-service:/app
+
+  simulation:
+    build:
+      context: .
+      dockerfile: simulation/Dockerfile
+    container_name: its-simulation-runner
+    depends_on:
+      - backend
+      - trust-service
+    volumes:
+      - ./simulation:/app
+    environment:
+      - BASE_URL=http://backend:8000
+    command: tail -f /dev/null

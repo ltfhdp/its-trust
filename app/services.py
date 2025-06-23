@@ -6,7 +6,7 @@ from sqlalchemy import case, select, func
 import logging
 import os
 
-TRUST_SERVICE_URL = "http://localhost:8001"
+TRUST_SERVICE_URL = os.getenv("TRUST_SERVICE_URL", "http://localhost:8001")
 TRUST_THRESHOLD = 0.3
 
 def setup_logger():

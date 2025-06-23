@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Database & Logs
+*.db
+*.sqlite3
+*.log
+
+# Lain-lain
+.git
+.vscode/

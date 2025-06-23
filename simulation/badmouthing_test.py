@@ -12,7 +12,7 @@ def calculate_smart_score(target_id: str, connection_success: bool) -> float:
         return 0.5  
 
     if connection_success:
-        base_score = random.uniform(0.7, 1.0)
+        base_score = random.uniform(0.6, 1.0)
     else:
         base_score = random.uniform(0.1, 0.4)
         
@@ -33,7 +33,7 @@ def calculate_smart_score(target_id: str, connection_success: bool) -> float:
 
 
 def run_simulation():
-    print("🚀 SCENARIO 2 (Hybrid): Badmouthing with Smart Rating (No Collusion)")
+    print("🚀 SCENARIO 2: Badmouthing")
     
     all_ids, malicious_ids = initialize_devices()
     
@@ -47,7 +47,7 @@ def run_simulation():
             
         # --- RATING 1: Dari Rater ke Target ---
         if rater in malicious_ids:
-            # Device jahat selalu memberikan rating buruk (TIDAK ADA KOLUSI)
+            # Device jahat selalu memberikan rating buruk 
             score_1 = round(random.uniform(0.1, 0.2), 2)
             print(f"  [🔴->⭐] {rater} badmouths {target} with {score_1:.2f}")
         else:

@@ -34,7 +34,7 @@ def flooding_parallel(attacker_id, normal_ids, count=30, max_workers=10):
 def run_simulation():
     print("🚀 SCENARIO: Refactored Flooding Attack")
 
-    all_ids, malicious_ids = initialize_devices(total=15, malicious_ratio=0.2)
+    all_ids, malicious_ids = initialize_devices(total=10, malicious_ratio=0.25)
     normal_ids = list(set(all_ids) - malicious_ids)
     attacker_id = list(malicious_ids)[0]
 

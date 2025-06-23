@@ -21,6 +21,7 @@ app = FastAPI()
 class PeerEvaluation(BaseModel):
     rating_score: float
     interaction_was_successful: bool
+    rater_reputation: Optional[str] = "AVERAGE"
 
 class TrustInitInput(BaseModel):
     ownership_type: str
@@ -34,37 +35,58 @@ class TrustUpdateInput(BaseModel):
     centrality_raw: int = 0  # jumlah koneksi unik
     rater_id: Optional[str] = None
     rated_id: Optional[str] = None
+    rated_reputation: Optional[str] = "AVERAGE"
 
 class SecurityEvaluateInput(BaseModel):
     device_id: str
     conn_count_last_minute: int
     is_coordinator: bool = False
 
-def calculate_validated_indirect_trust(peer_evaluations: List[PeerEvaluation]) -> float:
+def calculate_validated_indirect_trust(peer_evaluations: List[PeerEvaluation], rated_reputation: str) -> float:
     if not peer_evaluations:
         return 0.0
 
     valid_ratings = []
+    invalid_count = 0
+
     for evaluation in peer_evaluations:
-        # rating >= 0.5 hanya valid jika interaksi sebelumnya sukses
-        is_positive_rating_valid = (
-            evaluation.rating_score >= 0.5 and
-            evaluation.interaction_was_successful
-        )
+        score = evaluation.rating_score
+        success = evaluation.interaction_was_successful
+        rater_rep = evaluation.rater_reputation 
 
-        # rating < 0.5 hanya valid jika interaksi sebelumnya gagal
-        is_negative_rating_valid = (
-            evaluation.rating_score < 0.5 and
-            not evaluation.interaction_was_successful
-        )
-
-        if is_positive_rating_valid or is_negative_rating_valid:
-            valid_ratings.append(evaluation.rating_score)
+        if rater_rep in ["BLACKLISTED", "VERY_SUSPICIOUS"]:
+            invalid_count += 1
+            continue
+        is_valid = True
+        if score >= 0.5 and success:
+            # Normal good rating
+            valid_ratings.append(score)
+        elif score < 0.5:
+            if not success:
+                # Gagal koneksi → wajar kasih rating buruk
+                valid_ratings.append(score)
+            elif rated_reputation in ["POOR", "SUSPICIOUS", "BLACKLISTED"]:
+                # Koneksi sukses, tapi device target emang reputasi buruk → rating buruk tetap valid
+                valid_ratings.append(score)
+            else: #rating buruk, koneksi sukses, target baik = badmouthing
+                is_valid = False
+                invalid_count += 1
+        else: # rating baik, not success = kolusi
+            is_valid = False
+            invalid_count +=1
 
     if not valid_ratings:
-        return 0.0
+        return None
 
-    return round(sum(valid_ratings) / len(valid_ratings), 4)
+    total_ratings = len(peer_evaluations)
+    if invalid_count > total_ratings * 0.5:  # Lebih dari 50% tidak valid
+        validity_factor = 0.5  # Kurangi bobot menjadi setengah
+    else:
+        validity_factor = 1.0
+    
+    average_rating = sum(valid_ratings) / len(valid_ratings)
+
+    return round(average_rating * validity_factor, 4)
 
 # routes
 @app.get("/")
@@ -91,10 +113,7 @@ def calculate_trust(data: TrustUpdateInput):
     direct_trust = get_direct_trust_score(data.success)
 
     # 2. Indirect Observation
-    if data.peer_evaluations:
-        indirect_trust = calculate_validated_indirect_trust(data.peer_evaluations)
-    else:
-        indirect_trust = 0.0
+    indirect_trust = calculate_validated_indirect_trust(data.peer_evaluations, data.rated_reputation)
 
     # 3. Centrality score dari jumlah koneksi unik
     centrality = calculate_log_centrality(data.centrality_raw)
@@ -111,7 +130,7 @@ def calculate_trust(data: TrustUpdateInput):
     return {
         "updated_trust": updated,
         "direct_trust": direct_trust,
-        "indirect_trust": round(indirect_trust, 4),
+        "indirect_trust": round(indirect_trust, 4) if indirect_trust is not None else 0.0,
         "centrality_score": round(centrality, 4),
         "blacklisted": should_blacklist(updated)
     }

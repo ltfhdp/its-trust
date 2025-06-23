@@ -8,8 +8,7 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
-      - ./results/${SIMULATION_NAME}/trust_system.db:/app/trust_system.db
-      - ./results/${SIMULATION_NAME}/trust_system.log:/app/trust_system.log
+      - ./results/${SIMULATION_NAME:-default}:/data
     environment:
       - TRUST_SERVICE_URL=http://trust-service:8001
     depends_on:

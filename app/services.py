@@ -30,7 +30,7 @@ def setup_logger():
     logger.addHandler(console_handler)
     
     # File handler 
-    file_handler = logging.FileHandler('trust_system.log')
+    file_handler = logging.FileHandler('/data/logs.log')
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
@@ -73,7 +73,7 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
         logger.debug(f"SKIP_UPDATE: Peer {peer.id} is blacklisted, skipping trust update for {device.id}")
         return
     
-    # mengambil 15 rating terbaru selain dari peer saat ini
+    # mengambil 5 rating terbaru selain dari peer saat ini
     subquery = (
         select(Connection.status)
         .correlate(PeerRating)
@@ -89,20 +89,22 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
     
     results = session.query(
         PeerRating.score,
-        subquery.label("connection_status")
-        )\
-        .filter(PeerRating.rated_device_id == device.id)\
-        .filter(PeerRating.rater_device_id != peer.id)\
-        .filter(subquery != None)\
-        .order_by(PeerRating.timestamp.desc())\
-        .limit(15)\
-        .all()
+        subquery.label("connection_status"),
+        PeerRating.rater_device_id
+    ).filter(
+        PeerRating.rated_device_id == device.id,
+        PeerRating.rater_device_id != peer.id,
+        subquery != None
+    ).order_by(PeerRating.timestamp.desc()).limit(5).all()
     
     peer_evaluations = []
-    for score, status in results:
+    for score, status, rater_id in results:
+        rater = session.get(Device, rater_id)
+        rater_reputation = get_reputation_level(rater)
         peer_evaluations.append({
             "rating_score": score,
-            "interaction_was_successful": status
+            "interaction_was_successful": status,
+            "rater_reputation": rater_reputation
         })
 
     # centrality dari jumlah source unik
@@ -122,12 +124,13 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
     # mengirim ke trust service
     try:
         start_eval = datetime.utcnow()
-
+        evaluatin_context = "DEFAULT"
         res = requests.post(f"{TRUST_SERVICE_URL}/trust/calculate", json={
             "last_trust": device.trust_score,
             "success": success,
             "peer_evaluations": peer_evaluations,
-            "centrality_raw": centrality_raw
+            "centrality_raw": centrality_raw,
+            "rated_reputation": get_reputation_level(device)
         })
         result = res.json()
 
@@ -349,7 +352,7 @@ def add_peer_rating(session: Session, rater_id: str, rated_id: str, score: float
 
     # PENALTI karena DISHONEST
     if is_dishonest:
-        penalty = 0.15
+        penalty = 0.1
         
         old_trust_score = rater.trust_score
         

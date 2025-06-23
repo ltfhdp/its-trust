@@ -46,8 +46,12 @@ const handleMultiChange = async (selectedOptions) => {
   }
 };
 
+  const maxDataLength = selectedIds.length > 0
+  ? Math.max(...selectedIds.map(id => trustHistory[id]?.length || 0))
+  : 0;
+
   const chartData = {
-    labels: Array.from({ length: 20 }, (_, i) => i + 1),
+    labels: Array.from({ length: maxDataLength }, (_, i) => i + 1),
     datasets: selectedIds.map((id, i) => ({
       label: id,
       data: trustHistory[id]?.map(h => h.trust_score) || [],

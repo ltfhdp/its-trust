@@ -46,7 +46,7 @@ def evaluate_security(device_id: str, conn_count_last_minute: int, session: Sess
     
     try:
         res = requests.post(f"{TRUST_SERVICE_URL}/security/evaluate", json={
-            "device_id": device_id,
+            "source_id": device_id,
             "conn_count_last_minute": conn_count_last_minute,
             "is_coordinator": device.is_coordinator
         })

@@ -73,8 +73,7 @@ def calculate_updated_trust(
     last_trust: float,
     direct_trust: float,
     indirect_trust: float,
-    centrality_score: float,
-    centrality_raw: int
+    centrality_score: float
 ) -> float:
     
     td = last_trust + direct_trust

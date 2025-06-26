@@ -130,7 +130,8 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
             "success": success,
             "peer_evaluations": peer_evaluations,
             "centrality_raw": centrality_raw,
-            "rated_reputation": get_reputation_level(device)
+            "rated_reputation": get_reputation_level(device),
+            "interaction_count": device.connection_count
         })
         result = res.json()
 

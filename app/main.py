@@ -163,18 +163,29 @@ def rate_peer(rating: PeerRatingCreate, db: Session = Depends(get_db)):
 def get_log_activity(db: Session = Depends(get_db)):
     logs = []
 
-     # TrustHistory
-    history_entries = db.query(models.TrustHistory).all()
+    # TrustHistory
+    history_entries = db.query(models.TrustHistory).order_by(models.TrustHistory.timestamp.desc()).all()
     for h in history_entries:
-        activity_type = "malicious" if "blacklist" in (h.notes or "").lower() else "normal"
+        notes_lower = (h.notes or "").lower()
+        
+        malicious_keywords = ["blacklist", "dishonest", "flooding"]
+        is_malicious = any(keyword in notes_lower for keyword in malicious_keywords)
+        activity_type = "malicious" if is_malicious else "normal"
+
         status_detail = "trust_updated"
-        if "joined" in (h.notes or "").lower():
+        if "joined" in notes_lower:
             status_detail = "device_joined"
-        elif "blacklist" in (h.notes or "").lower():
+        elif "left the system" in notes_lower:
+            status_detail = "device_left"
+        elif "blacklist" in notes_lower:
             status_detail = "blacklisted"
-        elif "unregistered" in (h.notes or "").lower():
+        elif "dishonest" in notes_lower:
+            status_detail = "dishonest_rating"
+        elif "flooding" in notes_lower:
+            status_detail = "flooding_detected"
+        elif "unregistered" in notes_lower:
             status_detail = "denied_unregistered"
-        elif "trust too low" in (h.notes or "").lower():
+        elif "trust too low" in notes_lower:
             status_detail = "trust_rejected"
 
         logs.append({

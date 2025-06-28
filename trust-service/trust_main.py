@@ -60,34 +60,23 @@ def calculate_validated_indirect_trust(peer_evaluations: List[PeerEvaluation], r
             continue
         is_valid = True
         if score >= 0.5 and success:
-            # normal 
             valid_ratings.append(score)
         elif score < 0.5:
             if not success:
-                # failed, rating buruk = ok
                 valid_ratings.append(score)
             elif rated_reputation in ["POOR", "SUSPICIOUS", "BLACKLISTED"]:
-                # success, tapi device target emang reputasi buruk = ok
                 valid_ratings.append(score)
-            else: #rating buruk, koneksi sukses, target baik = badmouthing
+            else:
                 is_valid = False
                 invalid_count += 1
-        else: # rating baik, not success = kolusi
+        else: 
             is_valid = False
             invalid_count +=1
 
     if not valid_ratings:
         return 0.0, "ignored"
 
-    total_ratings = len(peer_evaluations)
-    if invalid_count > total_ratings * 0.5:  # Lebih dari 50% tidak valid
-        validity_factor = 0.5  # Kurangi bobot menjadi setengah
-    else:
-        validity_factor = 1.0
-    
-    average_rating = sum(valid_ratings) / len(valid_ratings)
-
-    return round(average_rating * validity_factor, 3), "validated"
+    return round(sum(valid_ratings) / len(valid_ratings), 3), "validated"
 
 # routes
 @app.get("/")

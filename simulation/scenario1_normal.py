@@ -36,21 +36,32 @@ def run_simulation():
     all_ids, _ = initialize_devices(total=10, malicious_ratio=0)
     
     print("\n🔄 --- Simulating 50 interactions ---")
-    for i in range(50):
+    connection_count = 0
+    rating_count = 0
+
+    for i in range(100):
         src, tgt = random.sample(all_ids, 2)
         success = random.random() < 0.9 
         status_str = "OK" if success else "FAIL"
 
         # 1. Catat koneksi
-        create_connection(src, tgt, success=success)
+        connection_result = create_connection(src, tgt, success=success)
+
+        if connection_result:
+            connection_count += 1
         
         # 2. Hitung skor rating berdasarkan keberhasilan
         score_src_to_tgt = calculate_smart_score(tgt, connection_success=success)
         score_tgt_to_src = calculate_smart_score(src, connection_success=success)
 
         # 3. Lakukan rating dua arah
-        rate_peer(src, tgt, score_src_to_tgt)
-        rate_peer(tgt, src, score_tgt_to_src)
+        rate_result1 = rate_peer(src, tgt, score_src_to_tgt)
+        rate_result2 = rate_peer(tgt, src, score_tgt_to_src)
+
+        if rate_result1:
+            rating_count += 1
+        if rate_result2:
+            rating_count += 1
         
         print(f"  -> Iter {i+1}: {src} <-> {tgt} ({status_str}) | Ratings: {score_src_to_tgt:.2f} / {score_tgt_to_src:.2f}")
 

@@ -81,7 +81,7 @@ def update_trust_score(session: Session, device: Device, peer: Device, success: 
             ((Connection.source_device_id == PeerRating.rater_device_id) & (Connection.target_device_id == PeerRating.rated_device_id)) |
             ((Connection.source_device_id == PeerRating.rated_device_id) & (Connection.target_device_id == PeerRating.rater_device_id))
         )
-        .where (Connection.timestamp < PeerRating.timestamp)
+        .where (Connection.timestamp <= PeerRating.timestamp)
         .order_by(Connection.timestamp.desc())
         .limit(1)
         .as_scalar()

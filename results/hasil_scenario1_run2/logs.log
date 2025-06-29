@@ -1,102 +1,302 @@
-2025-06-26 17:55:15 - app.services - INFO - Selecting new coordinator...
-2025-06-26 17:55:15 - app.services - INFO - Internal coordinator selected: dev-000 (RSU)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.008s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.004s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.004s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.004s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.004s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.004s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.004s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.004s)
-2025-06-26 17:55:16 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.005s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.005s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.004s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.004s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.004s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.004s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.007s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.006s)
-2025-06-26 17:55:17 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.005s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.004s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.004s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.004s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.004s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.004s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.005s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.005s)
-2025-06-26 17:55:18 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.004s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.004s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.005s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.004s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.006s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.005s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.006s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
-2025-06-26 17:55:19 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.005s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.005s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.005s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.005s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
-2025-06-26 17:55:20 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.005s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.005s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.004s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.006s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.004s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.005s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.005s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.005s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.006s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.004s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.009s)
-2025-06-26 17:55:21 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.005s)
-2025-06-26 17:55:22 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
-2025-06-26 17:55:22 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:44 - app.services - INFO - Selecting new coordinator...
+2025-06-29 13:08:44 - app.services - INFO - Internal coordinator selected: dev-000 (RSU)
+2025-06-29 13:08:44 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.006s)
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:44 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:44 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.004s)
+2025-06-29 13:08:44 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:44 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:44 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.004s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.004s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.005s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.005s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.004s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.004s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.005s)
+2025-06-29 13:08:45 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:45 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.004s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.004s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.004s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.010s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
+2025-06-29 13:08:46 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.005s)
+2025-06-29 13:08:46 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.005s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.004s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.004s)
+2025-06-29 13:08:47 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:47 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.005s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.004s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.004s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.006s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.004s)
+2025-06-29 13:08:48 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:48 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.004s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.004s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.004s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.005s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.004s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.005s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:49 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.005s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.004s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.004s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.004s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.005s)
+2025-06-29 13:08:50 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:50 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:51 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.005s)
+2025-06-29 13:08:51 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.004s)
+2025-06-29 13:08:51 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.006s)
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.006s)
+2025-06-29 13:08:51 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.007s)
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.005s)
+2025-06-29 13:08:51 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.006s)
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.005s)
+2025-06-29 13:08:51 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.005s)
+2025-06-29 13:08:51 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.007s)
+2025-06-29 13:08:51 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-004 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.004s)
+2025-06-29 13:08:52 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.006s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.004s)
+2025-06-29 13:08:52 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.004s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.004s)
+2025-06-29 13:08:52 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.005s)
+2025-06-29 13:08:52 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:52 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.006s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.004s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.004s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.006s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.005s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - INFO - SAFE: Device dev-003 passed evaluation (duration 0.003s)
+2025-06-29 13:08:53 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-009 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.004s)
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-006 passed evaluation (duration 0.005s)
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.004s)
+2025-06-29 13:08:54 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.004s)
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-005 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-000 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-008 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-001 passed evaluation (duration 0.003s)
+2025-06-29 13:08:54 - app.services - ERROR - Failed to call trust service for security evaluation: 422 Client Error: Unprocessable Entity for url: http://trust-service:8001/security/evaluate
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-007 passed evaluation (duration 0.004s)
+2025-06-29 13:08:54 - app.services - INFO - SAFE: Device dev-002 passed evaluation (duration 0.004s)

@@ -20,7 +20,7 @@ def calculate_smart_score(target_id: str, connection_success: bool) -> float:
     if level == "POOR": return base_score * 0.9
     return round(max(0.0, min(1.0, base_score)), 2)
 
-def flooding_parallel(attacker_id, normal_ids, count=30, max_workers=10):
+def flooding_parallel(attacker_id, normal_ids, count=50, max_workers=10):
     def one_connection():
         target = random.choice(normal_ids)
         print(f"  -> 🌊 Flooding: {attacker_id} → {target}")

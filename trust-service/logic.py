@@ -88,7 +88,7 @@ def should_blacklist(trust_score: float, threshold: float = 0.3) -> bool:
     return trust_score < threshold
 
 def get_flooding_threshold(is_coordinator: bool, device_count: int = 0) -> int:
-    return 24 if is_coordinator else 12
+    return 100 if is_coordinator else 50
 
 def evaluate_flooding_risk(recent_connections: int, is_coordinator: bool, device_count: int = 0) -> dict:
     threshold = get_flooding_threshold(is_coordinator, device_count)

@@ -40,7 +40,7 @@ class TrustUpdateInput(BaseModel):
 
 class SecurityEvaluateInput(BaseModel):
     source_id: str
-    conn_count_last_minute: int
+    conn_count_last_period: int
     is_coordinator: bool = False
 
 def calculate_validated_indirect_trust(peer_evaluations: List[PeerEvaluation], rated_reputation: str) -> tuple[float, str]:
@@ -139,7 +139,7 @@ def calculate_trust(data: TrustUpdateInput):
 @app.post("/security/evaluate")
 def security_evaluate(data: SecurityEvaluateInput):
     flood_result = evaluate_flooding_risk(
-        recent_connections=data.conn_count_last_minute,
+        recent_connections=data.conn_count_last_period,
         is_coordinator=data.is_coordinator,
     )
     

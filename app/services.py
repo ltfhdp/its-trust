@@ -39,7 +39,7 @@ def setup_logger():
 
 logger = setup_logger()
 
-def evaluate_security(device_id: str, conn_count_last_minute: int, session: Session):
+def evaluate_security(device_id: str, conn_count_last_period: int, session: Session):
     device = session.get(Device, device_id)
     if not device:
         return {"penalty": 0.0, "blacklisted": False}
@@ -47,7 +47,7 @@ def evaluate_security(device_id: str, conn_count_last_minute: int, session: Sess
     try:
         res = requests.post(f"{TRUST_SERVICE_URL}/security/evaluate", json={
             "source_id": device_id,
-            "conn_count_last_minute": conn_count_last_minute,
+            "conn_count_last_period": conn_count_last_period,
             "is_coordinator": device.is_coordinator
         })
         res.raise_for_status()  
@@ -437,7 +437,7 @@ def handle_flooding_check(session: Session, source_id: str, source: Device):
 
     recent_conn = session.query(Connection).filter(
         Connection.source_device_id == source_id,
-        Connection.timestamp >= datetime.utcnow() - timedelta(seconds=60)
+        Connection.timestamp >= datetime.utcnow() - timedelta(seconds=10)
     ).count()
 
     sec_eval = evaluate_security(source_id, recent_conn, session)

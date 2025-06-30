@@ -64,6 +64,8 @@ def run_simulation():
             print(f"  [..🟢] {tgt} smart-rates {src} back with {score_2:.2f}")
 
         rate_peer(tgt, src, score_2)
+
+        print(f"  -> Iter {i+1}: {src} <-> {tgt} | Ratings: {score_1:.2f} / {score_2:.2f}")
             
         time.sleep(0.01)
 
